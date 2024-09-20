@@ -1,5 +1,6 @@
-import 'package:cinemana/features/medias/domain/entities/media_kind.dart';
 import 'package:flutter/material.dart';
+
+import '../../domain/entities/media_kind.dart';
 
 class MediaSearchBar extends StatefulWidget {
   const MediaSearchBar({

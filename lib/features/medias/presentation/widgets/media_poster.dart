@@ -28,41 +28,45 @@ class _MediaPosterState extends State<MediaPoster> {
         onTap: () => widget.onPress?.call(widget.media),
         child: AspectRatio(
           aspectRatio: 0.66,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Flexible(
-                flex: 3,
-                child: Card(
-                  child: Container(
-                    clipBehavior: Clip.hardEdge,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: MediaThumbnailImage(
-                      url: widget.media.thumbnail,
+          child: IntrinsicHeight(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Flexible(
+                  flex: 3,
+                  child: Card(
+                    child: Container(
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: MediaThumbnailImage(
+                        url: widget.media.thumbnail,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              if (widget.showTitleText)
-                Flexible(
-                  flex: 1,
-                  child: Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: Text(
-                      style: const TextStyle(
-                        fontSize: 13,
+                if (widget.showTitleText)
+                  Flexible(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: Text(
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        widget.media.title,
+                        maxLines: 2,
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
                       ),
-                      widget.media.title,
-                      softWrap: true,
-                      overflow: TextOverflow.clip,
-                      textAlign: TextAlign.center,
                     ),
-                  ),
-                )
-            ],
+                  )
+              ],
+            ),
           ),
         ),
       ),

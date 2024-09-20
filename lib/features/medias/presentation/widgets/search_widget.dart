@@ -1,10 +1,10 @@
 import 'dart:collection';
 
-import 'package:cinemana/features/medias/domain/entities/media.dart';
-import 'package:cinemana/features/medias/domain/entities/media_kind.dart';
-import 'package:cinemana/features/medias/presentation/bloc/medias_bloc.dart';
-import 'package:cinemana/features/medias/presentation/widgets/medias_list.dart';
-import 'package:cinemana/features/medias/presentation/widgets/media_search_bar.dart';
+import '../../domain/entities/media.dart';
+import '../../domain/entities/media_kind.dart';
+import '../bloc/medias_bloc.dart';
+import 'medias_list.dart';
+import 'media_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

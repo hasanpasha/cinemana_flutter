@@ -1,10 +1,11 @@
-import 'package:cinemana/features/medias/data/data_sources/medias_remote_data_source.dart';
-import 'package:cinemana/features/medias/data/repositories/medias_repository_impl.dart';
-import 'package:cinemana/features/medias/domain/repositories/medias_repository.dart';
-import 'package:cinemana/features/medias/domain/usecases/search_medias.dart';
-import 'package:cinemana/features/medias/presentation/bloc/medias_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+
+import 'features/medias/data/data_sources/medias_remote_data_source.dart';
+import 'features/medias/data/repositories/medias_repository_impl.dart';
+import 'features/medias/domain/repositories/medias_repository.dart';
+import 'features/medias/domain/usecases/search_medias.dart';
+import 'features/medias/presentation/bloc/medias_bloc.dart';
 
 final sl = GetIt.instance;
 

@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:cinemana/features/medias/domain/entities/media.dart';
-import 'package:cinemana/features/medias/domain/entities/media_kind.dart';
-import 'package:cinemana/features/medias/domain/usecases/search_medias.dart';
+import '../../domain/entities/media.dart';
+import '../../domain/entities/media_kind.dart';
+import '../../domain/usecases/search_medias.dart';
 import 'package:equatable/equatable.dart';
 
 part 'medias_event.dart';

@@ -2,11 +2,12 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cinemana/features/medias/domain/entities/media.dart';
-import 'package:cinemana/features/medias/presentation/bloc/medias_bloc.dart';
-import 'package:cinemana/features/medias/presentation/widgets/media_poster.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+
+import '../../domain/entities/media.dart';
+import '../bloc/medias_bloc.dart';
+import 'media_poster.dart';
 
 enum ViewType {
   list,
@@ -38,7 +39,6 @@ class MediasList<T extends MediasState> extends StatefulWidget {
 
 class _MediasListState<T extends MediasState> extends State<MediasList> {
   late StreamSubscription<MediasState> streamSubscription;
-  // final pagingController = PagingController<int, Media>(firstPageKey: 1);
 
   @override
   void initState() {
@@ -56,32 +56,21 @@ class _MediasListState<T extends MediasState> extends State<MediasList> {
       }
     });
     widget.pagingController.addPageRequestListener(widget.mediasFetcher);
+
     super.initState();
   }
 
   @override
   void didUpdateWidget(covariant MediasList oldWidget) {
-    // if (widget != oldWidget) {
-    debugPrint("unsubscribe from medias state stream");
-    // streamSubscription.cancel();
-    // streamSubscription = widget.mediasStream.listen((state) {
-    //   if (state.status == LoadMediasStatus.success) {
-    //     debugPrint(state.medias.toString());
-    //     if (state.hasNext) {
-    //       widget.pagingController.appendPage(state.medias, state.page + 1);
-    //     } else {
-    //       widget.pagingController.appendLastPage(state.medias);
-    //     }
-    //   } else if (state.status == LoadMediasStatus.failure) {
-    //     widget.pagingController.error = "failure";
-    //   }
-    // });
-    oldWidget.pagingController
-        .removePageRequestListener(oldWidget.mediasFetcher);
-    widget.pagingController.addPageRequestListener(widget.mediasFetcher);
+    if (widget.mediasFetcher != oldWidget.mediasFetcher) {
+      debugPrint("unsubscribe from medias state stream");
+      widget.pagingController.addPageRequestListener(oldWidget.mediasFetcher);
 
-    widget.pagingController.refresh();
-    // }
+      widget.pagingController.addPageRequestListener(widget.mediasFetcher);
+
+      widget.pagingController.refresh();
+      widget.pagingController.notifyPageRequestListeners(1);
+    }
     super.didUpdateWidget(oldWidget);
   }
 
@@ -108,74 +97,8 @@ class _MediasListState<T extends MediasState> extends State<MediasList> {
               scrollDirection: Axis.vertical,
               pagingController: widget.pagingController,
               builderDelegate: PagedChildBuilderDelegate<Media>(
-                itemBuilder: (context, media, index) => Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    child: Container(
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      height: 200,
-                      child: Row(
-                        children: [
-                          AspectRatio(
-                            aspectRatio: 0.66,
-                            child: CachedNetworkImage(
-                              imageUrl: media.poster!,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  softWrap: true,
-                                  overflow: TextOverflow.clip,
-                                  "${media.title} (${media.year})",
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                // Expanded(child: Text(media.year.toString()))
-                                Expanded(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "categories: ",
-                                      ),
-                                      Expanded(
-                                        child: ListView.separated(
-                                          scrollDirection: Axis.horizontal,
-                                          shrinkWrap: true,
-                                          itemBuilder: (BuildContext context,
-                                                  int index) =>
-                                              Text(
-                                            "category $index",
-                                          ),
-                                          itemCount: 7,
-                                          separatorBuilder:
-                                              (BuildContext context,
-                                                      int index) =>
-                                                  Text(" * "),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                itemBuilder: (context, media, index) => MediaPosterDetailed(
+                  media: media,
                 ),
               ),
             ),
@@ -184,7 +107,7 @@ class _MediasListState<T extends MediasState> extends State<MediasList> {
               pagingController: widget.pagingController,
               builderDelegate: PagedChildBuilderDelegate<Media>(
                 itemBuilder: (context, media, index) => MediaPoster(
-                  showTitleText: true,
+                  showTitleText: false,
                   media: media,
                   onPress: (media) => debugPrint("selected $media"),
                 ),
@@ -200,12 +123,92 @@ class _MediasListState<T extends MediasState> extends State<MediasList> {
                   onPress: (media) => debugPrint("selected $media"),
                 ),
               ),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 childAspectRatio: 0.66,
-                crossAxisCount: 3,
+                crossAxisCount:
+                    MediaQuery.of(context).size.width.toInt() ~/ 150,
               ),
             ),
         },
+      ),
+    );
+  }
+}
+
+class MediaPosterDetailed extends StatelessWidget {
+  const MediaPosterDetailed({
+    super.key,
+    required this.media,
+  });
+
+  final Media media;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Card(
+        child: Container(
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          height: 200,
+          child: Row(
+            children: [
+              AspectRatio(
+                aspectRatio: 0.66,
+                child: CachedNetworkImage(
+                  imageUrl: media.poster!,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      softWrap: true,
+                      overflow: TextOverflow.clip,
+                      "${media.title} (${media.year})",
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    // Expanded(child: Text(media.year.toString()))
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "categories: ",
+                          ),
+                          Expanded(
+                            child: ListView.separated(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) =>
+                                  Text(
+                                "category $index",
+                              ),
+                              itemCount: 7,
+                              separatorBuilder:
+                                  (BuildContext context, int index) =>
+                                      Text(" * "),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

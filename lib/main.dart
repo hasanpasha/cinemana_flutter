@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'features/medias/presentation/pages/medias_page.dart';
 import 'injection_container.dart' as di;

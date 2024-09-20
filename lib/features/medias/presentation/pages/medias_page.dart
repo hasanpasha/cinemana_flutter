@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 
 import '../../../../injection_container.dart';
+import '../../domain/entities/media.dart';
 import '../bloc/medias_bloc.dart';
-import '../widgets/search_widget.dart';
-import 'search_medias_page.dart';
+import '../widgets/medias_list.dart';
 
 class MediasPage extends StatefulWidget {
   const MediasPage({super.key});
@@ -14,53 +16,110 @@ class MediasPage extends StatefulWidget {
 }
 
 class _MediasPageState extends State<MediasPage> {
-  final scrollController = ScrollController();
+  String query = "";
+  Function(int) fetcher = (_) {};
+  final pagingController = PagingController<int, Media>(firstPageKey: 1);
+
+  @override
+  void initState() {
+    super.initState();
+    pagingController
+        .addStatusListener((status) => debugPrint(status.toString()));
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MediasBloc>(
-      create: (_) => sl<MediasBloc>(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Cinemana',
-          ),
-          centerTitle: true,
-        ),
-        floatingActionButton: Builder(
-          builder: (context) => IconButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => BlocProvider.value(
-                  value: context.read<MediasBloc>(),
-                  child: const SearchMediasPage(),
-                ),
+      create: (context) => sl(),
+      child: Builder(builder: (context) {
+        return Scaffold(
+          body: FloatingSearchAppBar(
+            // bottom: const Text("hello"),
+            title: const Text(
+              "cinemana",
+            ),
+            // onQueryChanged: (query) => query = query,
+            onSubmitted: (query) {
+              setState(
+                () => fetcher = (page) {
+                  debugPrint("search for $query");
+                  BlocProvider.of<MediasBloc>(context).add(
+                    GetMediasBySearch(query: query, page: page),
+                  );
+                },
+              );
+            },
+            body: Material(
+              color: Colors.white,
+              elevation: 4.0,
+              child: MediasList<LoadedSearchMediasState>(
+                viewType: ViewType.grid,
+                pagingController: pagingController,
+                mediasFetcher: fetcher,
+                mediasStream:
+                    BlocProvider.of<MediasBloc>(context).getStateStream(),
               ),
             ),
-            icon: const Icon(Icons.search),
+          ),
+        );
+      }),
+    );
+  }
+
+  Widget buildFloatingSearchBar() {
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+
+    return FloatingSearchBar(
+      hint: 'Search...',
+      scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
+      transitionDuration: const Duration(milliseconds: 800),
+      transitionCurve: Curves.easeInOut,
+      physics: const BouncingScrollPhysics(),
+      axisAlignment: isPortrait ? 0.0 : -1.0,
+      openAxisAlignment: 0.0,
+      width: isPortrait ? 600 : 500,
+      debounceDelay: const Duration(milliseconds: 500),
+      onQueryChanged: (query) {
+        // Call your model, bloc, controller here.
+      },
+      // Specify a custom transition to be used for
+      // animating between opened and closed stated.
+      transition: CircularFloatingSearchBarTransition(),
+      actions: [
+        FloatingSearchBarAction(
+          showIfOpened: false,
+          child: CircularButton(
+            icon: const Icon(Icons.place),
+            onPressed: () {},
           ),
         ),
-        body: CustomScrollView(
-          controller: scrollController,
-          slivers: [
-            const SearchWidget(),
-            SliverList.builder(
-              itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 250,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.indigo,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+        FloatingSearchBarAction.searchToClear(
+          showIfClosed: false,
+        ),
+      ],
+      builder: (context, transition) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: SizedBox(
+            height: 200,
+            child: Material(
+              color: Colors.white,
+              elevation: 4.0,
+              child: MediasList<LoadedSearchMediasState>(
+                viewType: ViewType.slider,
+                // pagingController: (page) {},
+                mediasFetcher: (page) =>
+                    BlocProvider.of<MediasBloc>(context).add(
+                  GetMediasBySearch(query: "the day", page: page),
                 ),
+                mediasStream:
+                    BlocProvider.of<MediasBloc>(context).getStateStream(),
               ),
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

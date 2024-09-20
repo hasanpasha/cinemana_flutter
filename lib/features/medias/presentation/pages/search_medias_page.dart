@@ -1,6 +1,6 @@
-import 'package:cinemana/features/medias/domain/entities/media.dart';
-import 'package:cinemana/features/medias/presentation/bloc/medias_bloc.dart';
-import 'package:cinemana/features/medias/presentation/widgets/medias_list.dart';
+import '../../domain/entities/media.dart';
+import '../bloc/medias_bloc.dart';
+import '../widgets/medias_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
