@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cinemana/features/medias/presentation/widgets/media_thumbnail_image.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -22,16 +23,19 @@ class MediasList<T extends MediasState> extends StatefulWidget {
     required this.mediasStream,
     ViewType? viewType,
     PagingController<int, Media>? pagingController,
+    this.notify = false,
   })  : pagingController =
             pagingController ?? PagingController(firstPageKey: 1),
         viewType = viewType ?? ViewType.slider {
     debugPrint("creating new MediasList");
+    mediasStream.listen((state) => debugPrint("got status data $state"));
   }
 
   final Function(int) mediasFetcher;
   final Stream<T> mediasStream;
   final PagingController<int, Media> pagingController;
   final ViewType viewType;
+  final bool notify;
 
   @override
   State<MediasList> createState() => _MediasListState<T>();
@@ -39,13 +43,28 @@ class MediasList<T extends MediasState> extends StatefulWidget {
 
 class _MediasListState<T extends MediasState> extends State<MediasList> {
   late StreamSubscription<MediasState> streamSubscription;
+  //  =
+  //     widget.mediasStream.listen((state) {
+  //   if (state.status == LoadMediasStatus.success) {
+  //     debugPrint(state.medias.toString());
+  //     if (state.hasNext) {
+  //       widget.pagingController.appendPage(state.medias, state.page + 1);
+  //     } else {
+  //       widget.pagingController.appendLastPage(state.medias);
+  //     }
+  //   } else if (state.status == LoadMediasStatus.failure) {
+  //     widget.pagingController.error = "failure";
+  //   }
+  // });
 
   @override
   void initState() {
+    // if (!widget.notify) {
     debugPrint("SUBSCRIBING to medias state stream");
     streamSubscription = widget.mediasStream.listen((state) {
+      debugPrint("got result for paged list $state");
       if (state.status == LoadMediasStatus.success) {
-        debugPrint(state.medias.toString());
+        // debugPrint(state.medias.toString());
         if (state.hasNext) {
           widget.pagingController.appendPage(state.medias, state.page + 1);
         } else {
@@ -55,20 +74,48 @@ class _MediasListState<T extends MediasState> extends State<MediasList> {
         widget.pagingController.error = "failure";
       }
     });
+    streamSubscription = widget.mediasStream.listen((state) {
+      debugPrint("got result for paged list $state");
+      if (state.status == LoadMediasStatus.success) {
+        // debugPrint(state.medias.toString());
+        if (state.hasNext) {
+          widget.pagingController.appendPage(state.medias, state.page + 1);
+        } else {
+          widget.pagingController.appendLastPage(state.medias);
+        }
+      } else if (state.status == LoadMediasStatus.failure) {
+        widget.pagingController.error = "failure";
+      }
+    });
+    streamSubscription = widget.mediasStream.listen((state) {
+      debugPrint("got result for paged list $state");
+      if (state.status == LoadMediasStatus.success) {
+        // debugPrint(state.medias.toString());
+        if (state.hasNext) {
+          widget.pagingController.appendPage(state.medias, state.page + 1);
+        } else {
+          widget.pagingController.appendLastPage(state.medias);
+        }
+      } else if (state.status == LoadMediasStatus.failure) {
+        widget.pagingController.error = "failure";
+      }
+    });
+    // }
     widget.pagingController.addPageRequestListener(widget.mediasFetcher);
-
     super.initState();
   }
 
   @override
   void didUpdateWidget(covariant MediasList oldWidget) {
     if (widget.mediasFetcher != oldWidget.mediasFetcher) {
-      debugPrint("unsubscribe from medias state stream");
-      widget.pagingController.addPageRequestListener(oldWidget.mediasFetcher);
-
+      debugPrint("updating page listeners");
+      oldWidget.pagingController
+          .removePageRequestListener(oldWidget.mediasFetcher);
       widget.pagingController.addPageRequestListener(widget.mediasFetcher);
-
       widget.pagingController.refresh();
+      if (widget.notify) {
+        debugPrint("notifying page request listener");
+      }
       widget.pagingController.notifyPageRequestListeners(1);
     }
     super.didUpdateWidget(oldWidget);
@@ -76,8 +123,11 @@ class _MediasListState<T extends MediasState> extends State<MediasList> {
 
   @override
   void dispose() {
-    debugPrint("[DISPOSE] unsubscribe from medias state stream");
-    streamSubscription.cancel();
+    // if (!widget.notify) {
+    //   debugPrint(
+    //       "[DISPOSE] unsubscribe from medias state stream, isSuggestions: ${widget.notify}");
+    //   streamSubscription.cancel();
+    // }
     super.dispose();
   }
 
@@ -156,13 +206,7 @@ class MediaPosterDetailed extends StatelessWidget {
           height: 200,
           child: Row(
             children: [
-              AspectRatio(
-                aspectRatio: 0.66,
-                child: CachedNetworkImage(
-                  imageUrl: media.poster!,
-                  fit: BoxFit.cover,
-                ),
-              ),
+              MediaThumbnailImage(url: media.thumbnail),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(

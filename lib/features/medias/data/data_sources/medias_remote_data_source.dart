@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../core/error/exceptions.dart';
 import '../models/media_kind_model.dart';
@@ -21,6 +22,9 @@ class MediasRemoteDataSourceImpl implements MediasRemoteDataSource {
   MediasRemoteDataSourceImpl({required this.dio}) {
     dio.options = BaseOptions(
       baseUrl: "https://cinemana.shabakaty.com/api/android",
+      receiveTimeout: Duration(seconds: 3),
+      connectTimeout: Duration(seconds: 3),
+      sendTimeout: Duration(seconds: 3),
     );
   }
 
@@ -34,13 +38,16 @@ class MediasRemoteDataSourceImpl implements MediasRemoteDataSource {
     page ??= 1;
 
     try {
+      debugPrint("searching query: $query $page on remote");
       final result = await dio.get('/AdvancedSearch', queryParameters: {
         'videoTitle': query,
         'type': kind.name,
         'page': page - 1
       });
       if (result.statusCode != 200) throw ServerException();
-      return MediasModel.fromJson(result.data);
+      final data = MediasModel.fromJson(result.data);
+      debugPrint("got $data from remote");
+      return data;
     } on DioException {
       throw ServerException();
     }

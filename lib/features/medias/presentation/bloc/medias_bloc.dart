@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import '../../domain/entities/media.dart';
 import '../../domain/entities/media_kind.dart';
 import '../../domain/usecases/search_medias.dart';
@@ -29,12 +31,16 @@ class MediasBloc extends Bloc<MediasEvent, MediasState> {
         return result.fold(
           (failure) => emit(
               const LoadedSearchMediasState(status: LoadMediasStatus.failure)),
-          (medias) => emit(LoadedSearchMediasState(
-            status: LoadMediasStatus.success,
-            medias: medias.medias,
-            hasNext: medias.hasNext,
-            page: event.page,
-          )),
+          (medias) {
+            debugPrint("got result bloc for $event");
+            debugPrint("issuing LoadedSearchMediasState");
+            emit(LoadedSearchMediasState(
+              status: LoadMediasStatus.success,
+              medias: medias.medias,
+              hasNext: medias.hasNext,
+              page: event.page,
+            ));
+          },
         );
       },
     );

@@ -33,93 +33,77 @@ class _MediasPageState extends State<MediasPage> {
       create: (context) => sl(),
       child: Builder(builder: (context) {
         return Scaffold(
-          body: FloatingSearchAppBar(
-            // bottom: const Text("hello"),
-            title: const Text(
-              "cinemana",
-            ),
-            // onQueryChanged: (query) => query = query,
-            onSubmitted: (query) {
-              setState(
-                () => fetcher = (page) {
-                  debugPrint("search for $query");
-                  BlocProvider.of<MediasBloc>(context).add(
-                    GetMediasBySearch(query: query, page: page),
-                  );
-                },
-              );
-            },
-            body: Material(
-              color: Colors.white,
-              elevation: 4.0,
-              child: MediasList<LoadedSearchMediasState>(
-                viewType: ViewType.grid,
-                pagingController: pagingController,
-                mediasFetcher: fetcher,
-                mediasStream:
-                    BlocProvider.of<MediasBloc>(context).getStateStream(),
-              ),
-            ),
+          appBar: AppBar(
+            title: const Text('cinemana'),
+            actions: [
+              IconButton(
+                  onPressed: () => showSearch(
+                        context: context,
+                        delegate:
+                            CustomSearchDelegate(BlocProvider.of(context)),
+                      ),
+                  icon: const Icon(Icons.search))
+            ],
           ),
+          body: const Placeholder(),
         );
       }),
     );
   }
+}
 
-  Widget buildFloatingSearchBar() {
-    final isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
+class CustomSearchDelegate extends SearchDelegate {
+  CustomSearchDelegate(this._bloc) : stream = _bloc.getStateStream();
 
-    return FloatingSearchBar(
-      hint: 'Search...',
-      scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
-      transitionDuration: const Duration(milliseconds: 800),
-      transitionCurve: Curves.easeInOut,
-      physics: const BouncingScrollPhysics(),
-      axisAlignment: isPortrait ? 0.0 : -1.0,
-      openAxisAlignment: 0.0,
-      width: isPortrait ? 600 : 500,
-      debounceDelay: const Duration(milliseconds: 500),
-      onQueryChanged: (query) {
-        // Call your model, bloc, controller here.
+  final MediasBloc _bloc;
+  final Stream<LoadedSearchMediasState> stream;
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+        onPressed: () {
+          query = '';
+        },
+        icon: const Icon(Icons.clear),
+      ),
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        close(context, null);
       },
-      // Specify a custom transition to be used for
-      // animating between opened and closed stated.
-      transition: CircularFloatingSearchBarTransition(),
-      actions: [
-        FloatingSearchBarAction(
-          showIfOpened: false,
-          child: CircularButton(
-            icon: const Icon(Icons.place),
-            onPressed: () {},
-          ),
-        ),
-        FloatingSearchBarAction.searchToClear(
-          showIfClosed: false,
-        ),
-      ],
-      builder: (context, transition) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: SizedBox(
-            height: 200,
-            child: Material(
-              color: Colors.white,
-              elevation: 4.0,
-              child: MediasList<LoadedSearchMediasState>(
-                viewType: ViewType.slider,
-                // pagingController: (page) {},
-                mediasFetcher: (page) =>
-                    BlocProvider.of<MediasBloc>(context).add(
-                  GetMediasBySearch(query: "the day", page: page),
-                ),
-                mediasStream:
-                    BlocProvider.of<MediasBloc>(context).getStateStream(),
-              ),
-            ),
-          ),
-        );
+      icon: const Icon(Icons.arrow_back),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    debugPrint("building search results for $query");
+
+    return buildSearchMediasList(isSuggestions: false);
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return buildSearchMediasList(isSuggestions: true);
+  }
+
+  MediasList<LoadedSearchMediasState> buildSearchMediasList({
+    bool isSuggestions = false,
+  }) {
+    return MediasList<LoadedSearchMediasState>(
+      viewType: isSuggestions ? ViewType.list : ViewType.grid,
+      notify: isSuggestions,
+      mediasFetcher: (page) {
+        debugPrint("searching for query: $query, page: $page");
+        _bloc.add(GetMediasBySearch(query: query, page: page));
       },
+      // mediasStream: _bloc.getStateStream(),
+      mediasStream: stream,
     );
   }
 }
