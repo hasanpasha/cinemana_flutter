@@ -22,8 +22,6 @@ void main() {
     bloc = MediasBloc(searchMedias: mockSearchMedias);
   });
 
-  MediasBloc buildBloc() => MediasBloc(searchMedias: mockSearchMedias);
-
   tearDown(() {
     bloc.close();
   });
@@ -47,11 +45,15 @@ void main() {
       setUp: () => when(mockSearchMedias(any))
           .thenAnswer((_) async => const Right(tMedias)),
       act: (bloc) => bloc.add(const GetMediasBySearch(query: tQuery)),
-      verify: (bloc) => verify(mockSearchMedias(Params(
-          query: tQuery, kind: anyNamed('kind'), page: anyNamed('page')))),
+      verify: (bloc) => expect(
+          (verify(mockSearchMedias(captureAny)).captured[0] as Params).query,
+          tQuery),
       expect: () => [
-        LoadingMediasState(),
-        const LoadedSearchMediasState(medias: tMedias)
+        SearchMediasState(
+          status: LoadMediasStatus.success,
+          medias: tMedias.medias,
+          hasNext: tMedias.hasNext,
+        )
       ],
     );
 
@@ -61,12 +63,11 @@ void main() {
       setUp: () => when(mockSearchMedias(any))
           .thenAnswer((_) async => Left(ServerFailure())),
       act: (bloc) => bloc.add(const GetMediasBySearch(query: tQuery)),
-      verify: (bloc) => verify(mockSearchMedias(Params(query: tQuery))),
+      verify: (bloc) => expect(
+          (verify(mockSearchMedias(captureAny)).captured[0] as Params).query,
+          tQuery),
       expect: () => [
-        LoadingMediasState(),
-        ErrorMediasState(
-          message: ServerFailure().toString(),
-        ),
+        const SearchMediasState(status: LoadMediasStatus.failure),
       ],
     );
   });

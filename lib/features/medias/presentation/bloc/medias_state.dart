@@ -21,7 +21,7 @@ sealed class MediasState extends Equatable {
 
 final class EmptyMediasState extends MediasState {}
 
-final class LoadedSearchMediasState extends MediasState {
-  const LoadedSearchMediasState(
+final class SearchMediasState extends MediasState {
+  const SearchMediasState(
       {super.status, super.medias, super.hasNext, super.page});
 }

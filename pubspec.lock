@@ -262,6 +262,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.7.0"
+  dio_cache_interceptor:
+    dependency: "direct main"
+    description:
+      name: dio_cache_interceptor
+      sha256: fb7905c0d12075d8786a6b63bffd64ae062d053f682cfaf28d145a2686507308
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.5.0"
   dio_web_adapter:
     dependency: transitive
     description:
@@ -360,6 +368,19 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_toggle_tab:
+    dependency: "direct main"
+    description:
+      name: flutter_toggle_tab
+      sha256: "90ad0d050f656df677998825f985637d010117a1793828cd7e6dadada4ecd2c5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.1"
+  flutter_web_plugins:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   frontend_server_client:
     dependency: transitive
     description:
@@ -384,6 +405,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  go_router:
+    dependency: "direct main"
+    description:
+      name: go_router
+      sha256: "2ddb88e9ad56ae15ee144ed10e33886777eb5ca2509a914850a5faa7b52ff459"
+      url: "https://pub.dev"
+    source: hosted
+    version: "14.2.7"
   graphs:
     dependency: transitive
     description:

@@ -21,4 +21,6 @@ class Media extends Equatable {
 
   @override
   List<Object?> get props => [id, title, year, kind];
+
+  bool get isMovie => kind == MediaKind.movies;
 }

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:get_it/get_it.dart';
 
 import 'features/medias/data/data_sources/medias_remote_data_source.dart';
@@ -36,5 +37,10 @@ void init() {
   // Network
 
   //! External
-  sl.registerLazySingleton(() => Dio());
+  sl.registerLazySingleton<CacheStore>(() => MemCacheStore());
+  sl.registerLazySingleton<CacheOptions>(() => CacheOptions(store: sl()));
+  sl.registerLazySingleton(() {
+    return Dio();
+    // ..interceptors.add(DioCacheInterceptor(options: sl()));
+  });
 }

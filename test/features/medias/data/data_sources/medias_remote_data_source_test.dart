@@ -24,7 +24,7 @@ void main() {
   void setUpMockDioSuccess200() {
     when(mockDio.get(any, queryParameters: anyNamed('queryParameters')))
         .thenAnswer((_) async => Response(
-              data: fixture('medias.json'),
+              data: json.decode(fixture('medias.json')),
               statusCode: 200,
               requestOptions: RequestOptions(),
             ));
