@@ -14,7 +14,8 @@
             "name": "cinemana",
             "request": "launch",
             "type": "dart",
-            "showMemoryUsage": true
+            "showMemoryUsage": true,
+            "args": ["--verbose"],
         },
         {
             "name": "cinemana (profile mode)",

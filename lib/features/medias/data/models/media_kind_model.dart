@@ -10,10 +10,10 @@ enum MediaKindModel {
   final String number;
 
   factory MediaKindModel.fromName(String name) =>
-      MediaKindModel.all.byName(name);
+      MediaKindModel.values.byName(name);
 
   factory MediaKindModel.fromNumber(String number) {
-    for (var value in all) {
+    for (var value in values) {
       if (value.number == number) return value;
     }
     throw ArgumentError.value(
@@ -29,6 +29,4 @@ enum MediaKindModel {
         MediaKindModel.movies => MediaKind.movies,
         MediaKindModel.series => MediaKind.series,
       };
-
-  static List<MediaKindModel> get all => [movies, series];
 }

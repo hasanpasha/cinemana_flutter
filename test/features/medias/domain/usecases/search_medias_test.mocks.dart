@@ -6,9 +6,7 @@
 import 'dart:async' as _i4;
 
 import 'package:cinemana/core/error/failure.dart' as _i5;
-import 'package:cinemana/features/medias/domain/entities/media_kind.dart'
-    as _i7;
-import 'package:cinemana/features/medias/domain/entities/medias.dart' as _i6;
+import 'package:cinemana/features/medias/domain/entities/entities.dart' as _i6;
 import 'package:cinemana/features/medias/domain/repositories/medias_repository.dart'
     as _i3;
 import 'package:dartz/dartz.dart' as _i2;
@@ -48,7 +46,7 @@ class MockMediasRepository extends _i1.Mock implements _i3.MediasRepository {
   @override
   _i4.Future<_i2.Either<_i5.Failure, _i6.Medias>> search({
     required String? query,
-    _i7.MediaKind? kind,
+    _i6.MediaKind? kind,
     int? page,
   }) =>
       (super.noSuchMethod(
@@ -75,4 +73,86 @@ class MockMediasRepository extends _i1.Mock implements _i3.MediasRepository {
           ),
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, _i6.Medias>>);
+
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, List<_i6.Video>>> getVideos(
+          {required _i6.Media? media}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getVideos,
+          [],
+          {#media: media},
+        ),
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, List<_i6.Video>>>.value(
+            _FakeEither_0<_i5.Failure, List<_i6.Video>>(
+          this,
+          Invocation.method(
+            #getVideos,
+            [],
+            {#media: media},
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Video>>>);
+
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, List<_i6.Subtitle>>> getSubtitles(
+          {required _i6.Media? media}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getSubtitles,
+          [],
+          {#media: media},
+        ),
+        returnValue:
+            _i4.Future<_i2.Either<_i5.Failure, List<_i6.Subtitle>>>.value(
+                _FakeEither_0<_i5.Failure, List<_i6.Subtitle>>(
+          this,
+          Invocation.method(
+            #getSubtitles,
+            [],
+            {#media: media},
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Subtitle>>>);
+
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, List<_i6.Season>>> getSeasons(
+          {required _i6.Media? media}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getSeasons,
+          [],
+          {#media: media},
+        ),
+        returnValue:
+            _i4.Future<_i2.Either<_i5.Failure, List<_i6.Season>>>.value(
+                _FakeEither_0<_i5.Failure, List<_i6.Season>>(
+          this,
+          Invocation.method(
+            #getSeasons,
+            [],
+            {#media: media},
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Season>>>);
+
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, _i6.Media>> getInfo(
+          {required _i6.Media? media}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getInfo,
+          [],
+          {#media: media},
+        ),
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.Media>>.value(
+            _FakeEither_0<_i5.Failure, _i6.Media>(
+          this,
+          Invocation.method(
+            #getInfo,
+            [],
+            {#media: media},
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i6.Media>>);
 }

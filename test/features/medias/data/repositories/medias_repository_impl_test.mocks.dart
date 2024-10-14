@@ -3,13 +3,21 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i7;
 
+import 'package:cinemana/core/network/network_info/network_info.dart' as _i11;
+import 'package:cinemana/features/medias/data/data_sources/medias_local_data_source.dart'
+    as _i10;
 import 'package:cinemana/features/medias/data/data_sources/medias_remote_data_source.dart'
-    as _i3;
+    as _i6;
 import 'package:cinemana/features/medias/data/models/media_kind_model.dart'
-    as _i5;
+    as _i8;
+import 'package:cinemana/features/medias/data/models/media_model.dart' as _i5;
 import 'package:cinemana/features/medias/data/models/medias_model.dart' as _i2;
+import 'package:cinemana/features/medias/data/models/seasons_model.dart' as _i4;
+import 'package:cinemana/features/medias/data/models/subtitles_model.dart'
+    as _i3;
+import 'package:cinemana/features/medias/data/models/video_model.dart' as _i9;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -35,19 +43,50 @@ class _FakeMediasModel_0 extends _i1.SmartFake implements _i2.MediasModel {
         );
 }
 
+class _FakeSubtitlesModel_1 extends _i1.SmartFake
+    implements _i3.SubtitlesModel {
+  _FakeSubtitlesModel_1(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeSeasonsModel_2 extends _i1.SmartFake implements _i4.SeasonsModel {
+  _FakeSeasonsModel_2(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeMediaModel_3 extends _i1.SmartFake implements _i5.MediaModel {
+  _FakeMediaModel_3(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [MediasRemoteDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockMediasRemoteDataSource extends _i1.Mock
-    implements _i3.MediasRemoteDataSource {
+    implements _i6.MediasRemoteDataSource {
   MockMediasRemoteDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<_i2.MediasModel> search({
+  _i7.Future<_i2.MediasModel> search({
     required String? query,
-    _i5.MediaKindModel? kind,
+    _i8.MediaKindModel? kind,
     int? page,
   }) =>
       (super.noSuchMethod(
@@ -60,7 +99,7 @@ class MockMediasRemoteDataSource extends _i1.Mock
             #page: page,
           },
         ),
-        returnValue: _i4.Future<_i2.MediasModel>.value(_FakeMediasModel_0(
+        returnValue: _i7.Future<_i2.MediasModel>.value(_FakeMediasModel_0(
           this,
           Invocation.method(
             #search,
@@ -72,5 +111,223 @@ class MockMediasRemoteDataSource extends _i1.Mock
             },
           ),
         )),
-      ) as _i4.Future<_i2.MediasModel>);
+      ) as _i7.Future<_i2.MediasModel>);
+
+  @override
+  _i7.Future<List<_i9.VideoModel>> getVideos(String? id) => (super.noSuchMethod(
+        Invocation.method(
+          #getVideos,
+          [id],
+        ),
+        returnValue: _i7.Future<List<_i9.VideoModel>>.value(<_i9.VideoModel>[]),
+      ) as _i7.Future<List<_i9.VideoModel>>);
+
+  @override
+  _i7.Future<_i3.SubtitlesModel> getSubtitles(String? id) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getSubtitles,
+          [id],
+        ),
+        returnValue: _i7.Future<_i3.SubtitlesModel>.value(_FakeSubtitlesModel_1(
+          this,
+          Invocation.method(
+            #getSubtitles,
+            [id],
+          ),
+        )),
+      ) as _i7.Future<_i3.SubtitlesModel>);
+
+  @override
+  _i7.Future<_i4.SeasonsModel> getSeasons(String? id) => (super.noSuchMethod(
+        Invocation.method(
+          #getSeasons,
+          [id],
+        ),
+        returnValue: _i7.Future<_i4.SeasonsModel>.value(_FakeSeasonsModel_2(
+          this,
+          Invocation.method(
+            #getSeasons,
+            [id],
+          ),
+        )),
+      ) as _i7.Future<_i4.SeasonsModel>);
+
+  @override
+  _i7.Future<_i5.MediaModel> getInfo(String? id) => (super.noSuchMethod(
+        Invocation.method(
+          #getInfo,
+          [id],
+        ),
+        returnValue: _i7.Future<_i5.MediaModel>.value(_FakeMediaModel_3(
+          this,
+          Invocation.method(
+            #getInfo,
+            [id],
+          ),
+        )),
+      ) as _i7.Future<_i5.MediaModel>);
+}
+
+/// A class which mocks [MediasLocalDataSource].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockMediasLocalDataSource extends _i1.Mock
+    implements _i10.MediasLocalDataSource {
+  MockMediasLocalDataSource() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i7.Future<_i2.MediasModel> getLastSearchResult() => (super.noSuchMethod(
+        Invocation.method(
+          #getLastSearchResult,
+          [],
+        ),
+        returnValue: _i7.Future<_i2.MediasModel>.value(_FakeMediasModel_0(
+          this,
+          Invocation.method(
+            #getLastSearchResult,
+            [],
+          ),
+        )),
+      ) as _i7.Future<_i2.MediasModel>);
+
+  @override
+  _i7.Future<bool> cacheSearchResult(_i2.MediasModel? medias) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #cacheSearchResult,
+          [medias],
+        ),
+        returnValue: _i7.Future<bool>.value(false),
+      ) as _i7.Future<bool>);
+
+  @override
+  _i7.Future<List<_i9.VideoModel>> getVideos(String? id) => (super.noSuchMethod(
+        Invocation.method(
+          #getVideos,
+          [id],
+        ),
+        returnValue: _i7.Future<List<_i9.VideoModel>>.value(<_i9.VideoModel>[]),
+      ) as _i7.Future<List<_i9.VideoModel>>);
+
+  @override
+  _i7.Future<bool> cacheMediaVideos(
+    String? id,
+    List<_i9.VideoModel>? videos,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #cacheMediaVideos,
+          [
+            id,
+            videos,
+          ],
+        ),
+        returnValue: _i7.Future<bool>.value(false),
+      ) as _i7.Future<bool>);
+
+  @override
+  _i7.Future<_i3.SubtitlesModel> getSubtitles(String? id) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getSubtitles,
+          [id],
+        ),
+        returnValue: _i7.Future<_i3.SubtitlesModel>.value(_FakeSubtitlesModel_1(
+          this,
+          Invocation.method(
+            #getSubtitles,
+            [id],
+          ),
+        )),
+      ) as _i7.Future<_i3.SubtitlesModel>);
+
+  @override
+  _i7.Future<bool> cacheMediaSubtitles(
+    String? id,
+    _i3.SubtitlesModel? subtitles,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #cacheMediaSubtitles,
+          [
+            id,
+            subtitles,
+          ],
+        ),
+        returnValue: _i7.Future<bool>.value(false),
+      ) as _i7.Future<bool>);
+
+  @override
+  _i7.Future<_i4.SeasonsModel> getSeasons(String? id) => (super.noSuchMethod(
+        Invocation.method(
+          #getSeasons,
+          [id],
+        ),
+        returnValue: _i7.Future<_i4.SeasonsModel>.value(_FakeSeasonsModel_2(
+          this,
+          Invocation.method(
+            #getSeasons,
+            [id],
+          ),
+        )),
+      ) as _i7.Future<_i4.SeasonsModel>);
+
+  @override
+  _i7.Future<bool> cacheMediaSeasons(
+    String? id,
+    _i4.SeasonsModel? seasons,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #cacheMediaSeasons,
+          [
+            id,
+            seasons,
+          ],
+        ),
+        returnValue: _i7.Future<bool>.value(false),
+      ) as _i7.Future<bool>);
+
+  @override
+  _i7.Future<_i5.MediaModel> getInfo(String? id) => (super.noSuchMethod(
+        Invocation.method(
+          #getInfo,
+          [id],
+        ),
+        returnValue: _i7.Future<_i5.MediaModel>.value(_FakeMediaModel_3(
+          this,
+          Invocation.method(
+            #getInfo,
+            [id],
+          ),
+        )),
+      ) as _i7.Future<_i5.MediaModel>);
+
+  @override
+  _i7.Future<bool> cacheMediaInfo(_i5.MediaModel? mediaModel) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #cacheMediaInfo,
+          [mediaModel],
+        ),
+        returnValue: _i7.Future<bool>.value(false),
+      ) as _i7.Future<bool>);
+}
+
+/// A class which mocks [NetworkInfo].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockNetworkInfo extends _i1.Mock implements _i11.NetworkInfo {
+  MockNetworkInfo() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i7.Future<bool> get isConnected => (super.noSuchMethod(
+        Invocation.getter(#isConnected),
+        returnValue: _i7.Future<bool>.value(false),
+      ) as _i7.Future<bool>);
 }

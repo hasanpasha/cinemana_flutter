@@ -1,3 +1,6 @@
+import 'dart:collection';
+
+import 'package:cinemana/features/medias/domain/entities/entities.dart';
 import 'package:flutter/material.dart';
 
 double width(BuildContext context) => MediaQuery.of(context).size.width;

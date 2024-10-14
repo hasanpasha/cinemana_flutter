@@ -1,0 +1,44 @@
+[
+    {
+        "name": "mp4-240",
+        "resolution": "240p",
+        "container": "mp4",
+        "transcoddedFileName": "5E795365-3270-D81D-A2AA-A776406E15A5_video.mp4",
+        "videoUrl": "https:\/\/cdn.shabakaty.com\/vascin24-mp4\/5E795365-3270-D81D-A2AA-A776406E15A5_video.mp4?response-content-disposition=attachment%3B%20filename%3D%22video.mp4%22&AWSAccessKeyId=PSFBSAZRKNBJOAMKHHBIBOBEONKBBOPKEDDBFBOJCH&Expires=1727454424&Signature=dy9g75gPlhvMNvrZsVpb3EyDlqo%3D"
+    },
+    {
+        "name": "mp4-360",
+        "resolution": "360p",
+        "container": "mp4",
+        "transcoddedFileName": "9D74F9F3-D567-322C-2C76-9C26B2C5CCE2_video.mp4",
+        "videoUrl": "https:\/\/cdn.shabakaty.com\/vascin24-mp4\/9D74F9F3-D567-322C-2C76-9C26B2C5CCE2_video.mp4?response-content-disposition=attachment%3B%20filename%3D%22video.mp4%22&AWSAccessKeyId=PSFBSAZRKNBJOAMKHHBIBOBEONKBBOPKEDDBFBOJCH&Expires=1727454424&Signature=bySyK73SzYHUZYGLIMU%2Br0RZv0I%3D"
+    },
+    {
+        "name": "m480",
+        "resolution": "480p",
+        "container": "mp4",
+        "transcoddedFileName": "D563FB18-A20F-7D99-52D7-11172432F549_video.mp4",
+        "videoUrl": "https:\/\/cdn.shabakaty.com\/vascin24-mp4\/D563FB18-A20F-7D99-52D7-11172432F549_video.mp4?response-content-disposition=attachment%3B%20filename%3D%22video.mp4%22&AWSAccessKeyId=PSFBSAZRKNBJOAMKHHBIBOBEONKBBOPKEDDBFBOJCH&Expires=1727454424&Signature=g8%2BTbuzsDZGWvTb425oM0V3CShU%3D"
+    },
+    {
+        "name": "mp4-720",
+        "resolution": "720p",
+        "container": "mp4",
+        "transcoddedFileName": "BC0F1611-07DE-282F-9359-10A955287D20_video.mp4",
+        "videoUrl": "https:\/\/cdn.shabakaty.com\/vascin24-mp4\/BC0F1611-07DE-282F-9359-10A955287D20_video.mp4?response-content-disposition=attachment%3B%20filename%3D%22video.mp4%22&AWSAccessKeyId=PSFBSAZRKNBJOAMKHHBIBOBEONKBBOPKEDDBFBOJCH&Expires=1727454424&Signature=WbDhJ1dlw%2FOfRFNAoAgPPaUB8fU%3D"
+    },
+    {
+        "name": "mp4-1080",
+        "resolution": "1080p",
+        "container": "mp4",
+        "transcoddedFileName": "3C239CB9-B570-54F0-4035-A5C58F2AC354_video.mp4",
+        "videoUrl": "https:\/\/cdn.shabakaty.com\/vascin24-mp4\/3C239CB9-B570-54F0-4035-A5C58F2AC354_video.mp4?response-content-disposition=attachment%3B%20filename%3D%22video.mp4%22&AWSAccessKeyId=PSFBSAZRKNBJOAMKHHBIBOBEONKBBOPKEDDBFBOJCH&Expires=1727454424&Signature=eWqFqCWE%2FX2eNQALdiB2tM7SSyw%3D"
+    },
+    {
+        "name": "mp4-4k",
+        "resolution": "2160p",
+        "container": "mp4",
+        "transcoddedFileName": "CC8E984F-01B0-98AB-53DC-77A67259E2F4_video.mp4",
+        "videoUrl": "https:\/\/cdn.shabakaty.com\/vascin24-mp4-4k\/CC8E984F-01B0-98AB-53DC-77A67259E2F4_video.mp4?response-content-disposition=attachment%3B%20filename%3D%22video.mp4%22&AWSAccessKeyId=PSFBSAZRKNBJOAMKHHBIBOBEONKBBOPKEDDBFBOJCH&Expires=1727454424&Signature=jyAYmxUKBnXxZDkk3K4U2GXkwPo%3D"
+    }
+]

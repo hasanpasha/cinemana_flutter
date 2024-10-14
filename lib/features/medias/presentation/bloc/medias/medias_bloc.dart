@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
+import 'package:logging/logging.dart';
 
-import '../../domain/entities/media.dart';
-import '../../domain/entities/media_kind.dart';
-import '../../domain/usecases/search_medias.dart';
+import '../../../domain/entities/entities.dart';
+import '../../../domain/usecases/get_seasons.dart';
+import '../../../domain/usecases/search_medias.dart';
 
 part 'medias_event.dart';
 part 'medias_state.dart';
@@ -14,12 +15,18 @@ part 'medias_state.dart';
 class MediasBloc extends Bloc<MediasEvent, MediasState> {
   final SearchMedias searchMedias;
 
-  MediasBloc({required this.searchMedias}) : super(EmptyMediasState()) {
-    on<GetMediasBySearch>(_onGetMediasBySearch, transformer: restartable());
+  final log = Logger('MediasBloc');
+
+  MediasBloc({
+    required this.searchMedias,
+  }) : super(EmptyMediasState()) {
+    on<GetMediasBySearch>(onGetMediasBySearch, transformer: restartable());
   }
 
-  Future<void> _onGetMediasBySearch(
-      GetMediasBySearch event, Emitter<MediasState> emit) async {
+  Future<void> onGetMediasBySearch(
+    GetMediasBySearch event,
+    Emitter<MediasState> emit,
+  ) async {
     await searchMedias(Params(
       query: event.query,
       kind: event.kind,
@@ -27,6 +34,8 @@ class MediasBloc extends Bloc<MediasEvent, MediasState> {
     )).then(
       (result) {
         if (emit.isDone) return;
+
+        log.info("[GetMediasBySearch] got result $result");
         return result.fold(
           (failure) =>
               emit(const SearchMediasState(status: LoadMediasStatus.failure)),

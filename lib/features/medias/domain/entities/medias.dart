@@ -8,6 +8,13 @@ class Medias extends Equatable {
 
   const Medias({required this.hasNext, required this.medias});
 
+  Medias copyWith({bool? hasNext, List<Media>? medias}) {
+    return Medias(
+      hasNext: hasNext ?? this.hasNext,
+      medias: medias ?? this.medias,
+    );
+  }
+
   @override
   List<Object?> get props => [hasNext, medias];
 }

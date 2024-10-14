@@ -9,12 +9,16 @@ class Media extends Equatable {
   final MediaKind kind;
   final String? thumbnail;
   final String? poster;
+  final String? description;
+  final num? rate;
 
   const Media({
     required this.id,
     required this.title,
     required this.kind,
     required this.year,
+    this.description,
+    this.rate,
     this.thumbnail,
     this.poster,
   });

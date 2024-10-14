@@ -1,0 +1,37 @@
+{
+    "arTranslationFile": "A1125DD8-8817-9614-FA9F-E95E8DF365C3_ar_transfile.srt",
+    "enTranslationFile": "3EAC3CAD-A46D-23F3-7F38-66279E2C258C_en_transfile.srt",
+    "spTranslationFile": "",
+    "arTranslationFilePath": "https://cnth2.shabakaty.com/vascin-translation-files/A1125DD8-8817-9614-FA9F-E95E8DF365C3_ar_transfile.srt?response-cache-control=max-age%3D86400&AWSAccessKeyId=PSFBSAZRKNBJOAMKHHBIBOBEONKBBOPKEDDBFBOJCH&Expires=1730069882&Signature=56t0oJiLwYE%2FBe8qNXR%2BT7Bln%2Bw%3D",
+    "enTranslationFilePath": "https://cnth2.shabakaty.com/vascin-translation-files/3EAC3CAD-A46D-23F3-7F38-66279E2C258C_en_transfile.srt?response-cache-control=max-age%3D86400&AWSAccessKeyId=PSFBSAZRKNBJOAMKHHBIBOBEONKBBOPKEDDBFBOJCH&Expires=1730069882&Signature=2Apt%2B2GWB7b0WPmBWXNmFK%2FZV5E%3D",
+    "translations": [
+        {
+            "id": 1,
+            "name": "arabic",
+            "type": "ar",
+            "extention": "srt",
+            "file": "https://cnth2.shabakaty.com/vascin-translation-files/A1125DD8-8817-9614-FA9F-E95E8DF365C3_ar_transfile.srt?response-cache-control=max-age%3D86400&AWSAccessKeyId=PSFBSAZRKNBJOAMKHHBIBOBEONKBBOPKEDDBFBOJCH&Expires=1730069882&Signature=56t0oJiLwYE%2FBe8qNXR%2BT7Bln%2Bw%3D"
+        },
+        {
+            "id": 2,
+            "name": "arabic",
+            "type": "ar",
+            "extention": "vtt",
+            "file": "https://cnth2.shabakaty.com/vascin-translation-files/A1125DD8-8817-9614-FA9F-E95E8DF365C3_ar_transfile.vtt?response-cache-control=max-age%3D86400&AWSAccessKeyId=PSFBSAZRKNBJOAMKHHBIBOBEONKBBOPKEDDBFBOJCH&Expires=1730069882&Signature=3B8KC45fsvIgjF8t7zfqEybIkzM%3D"
+        },
+        {
+            "id": 3,
+            "name": "english",
+            "type": "en",
+            "extention": "srt",
+            "file": "https://cnth2.shabakaty.com/vascin-translation-files/3EAC3CAD-A46D-23F3-7F38-66279E2C258C_en_transfile.srt?response-cache-control=max-age%3D86400&AWSAccessKeyId=PSFBSAZRKNBJOAMKHHBIBOBEONKBBOPKEDDBFBOJCH&Expires=1730069882&Signature=2Apt%2B2GWB7b0WPmBWXNmFK%2FZV5E%3D"
+        },
+        {
+            "id": 4,
+            "name": "english",
+            "type": "en",
+            "extention": "vtt",
+            "file": "https://cnth2.shabakaty.com/vascin-translation-files/3EAC3CAD-A46D-23F3-7F38-66279E2C258C_en_transfile.vtt?response-cache-control=max-age%3D86400&AWSAccessKeyId=PSFBSAZRKNBJOAMKHHBIBOBEONKBBOPKEDDBFBOJCH&Expires=1730069882&Signature=xiaRRoEUTp0nBXO5Kzqt4X0ge0k%3D"
+        }
+    ]
+}
