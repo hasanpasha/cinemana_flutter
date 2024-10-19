@@ -6,7 +6,6 @@ import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 
 import '../../../domain/entities/entities.dart';
-import '../../../domain/usecases/get_seasons.dart';
 import '../../../domain/usecases/search_medias.dart';
 
 part 'medias_event.dart';

@@ -1,14 +1,12 @@
-import 'package:cinemana/core/network/network_info/network_info.dart';
-import 'package:cinemana/features/medias/data/data_sources/medias_local_data_source.dart';
-import 'package:cinemana/features/medias/data/models/medias_model.dart';
 import 'package:dartz/dartz.dart';
-import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failure.dart';
+import '../../../../core/network/network_info/network_info.dart';
 import '../../domain/entities/entities.dart';
 import '../../domain/repositories/medias_repository.dart';
+import '../data_sources/medias_local_data_source.dart';
 import '../data_sources/medias_remote_data_source.dart';
 import '../models/media_kind_model.dart';
 
