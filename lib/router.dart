@@ -5,7 +5,7 @@ import 'features/medias/domain/entities/media.dart';
 import 'features/medias/presentation/pages/media_detail_page.dart';
 import 'features/medias/presentation/pages/medias_page.dart';
 import 'features/medias/presentation/pages/medias_search_page.dart';
-import 'features/medias/presentation/widgets/sa.dart';
+import 'features/medias/presentation/widgets/scaffold_with_navbar.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -19,7 +19,7 @@ final router = GoRouter(
       navigatorKey: _shellNavigatorKey,
       pageBuilder: (context, state, child) {
         return NoTransitionPage(
-          child: ScaffoldWithNavBar(
+          child: ScaffoldWithNavbar(
             location: state.matchedLocation,
             child: child,
           ),

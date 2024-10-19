@@ -2,8 +2,8 @@ import 'package:cinemana/core/presentation/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class ScaffoldWithNavBar extends StatefulWidget {
-  const ScaffoldWithNavBar({
+class ScaffoldWithNavbar extends StatefulWidget {
+  const ScaffoldWithNavbar({
     super.key,
     required this.child,
     required this.location,
@@ -13,10 +13,10 @@ class ScaffoldWithNavBar extends StatefulWidget {
   final String location;
 
   @override
-  State<ScaffoldWithNavBar> createState() => _ScaffoldWithNavBarState();
+  State<ScaffoldWithNavbar> createState() => _ScaffoldWithNavbarState();
 }
 
-class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
+class _ScaffoldWithNavbarState extends State<ScaffoldWithNavbar> {
   int _currentIndex = 0;
 
   final destinations = [
