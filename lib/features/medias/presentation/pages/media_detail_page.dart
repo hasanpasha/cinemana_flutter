@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:keep_screen_on/keep_screen_on.dart';
+import 'package:logging/logging.dart';
+import 'package:media_kit/media_kit.dart' as media_kit;
 import 'package:media_kit_video/media_kit_video.dart';
 
 import '../../../../core/presentation/extensions.dart';
@@ -176,7 +178,7 @@ class MediaDetailView extends ConsumerWidget {
   }
 }
 
-class MediaVideoPlayer extends ConsumerWidget {
+class MediaVideoPlayer extends ConsumerStatefulWidget {
   const MediaVideoPlayer({
     super.key,
     this.showControls = true,
@@ -185,15 +187,61 @@ class MediaVideoPlayer extends ConsumerWidget {
   final bool showControls;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MediaVideoPlayer> createState() => _MediaVideoPlayerState();
+}
+
+class _MediaVideoPlayerState extends ConsumerState<MediaVideoPlayer> {
+  static final _logger = Logger('_MediaVideoPlayerState');
+
+  @override
+  void initState() {
+    super.initState();
+
+    ref.listenManual(
+      videoProvider,
+      fireImmediately: true,
+      (prev, next) async {
+        _logger.info("new video: $next");
+        final player = ref.read(videoPlayerProvider);
+        if (next != null) {
+          await player.open(next);
+          if (ref.context.mounted) {
+            final subtitle = ref.read(subtitleProvider);
+            if (subtitle != null) {
+              await player.setSubtitleTrack(subtitle);
+            }
+          }
+        } else {
+          await player.stop();
+        }
+      },
+    );
+
+    ref.listenManual(
+      subtitleProvider,
+      fireImmediately: true,
+      (prev, next) async {
+        _logger.info("new subtitle: $next");
+        final player = ref.read(videoPlayerProvider);
+        if (next != null) {
+          await player.setSubtitleTrack(next);
+        } else {
+          await player.setSubtitleTrack(media_kit.SubtitleTrack.no());
+        }
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final videoController = ref.watch(videoPlayerControllerProvider);
     final videoBoxFit = ref.watch(videoBoxFitStateProvider);
 
-    if (videoController == null) return const SizedBox.shrink();
     return Video(
       fit: videoBoxFit,
       controller: videoController,
-      controls: showControls ? customAdaptiveVideoControls : NoVideoControls,
+      controls:
+          widget.showControls ? customAdaptiveVideoControls : NoVideoControls,
     );
   }
 }

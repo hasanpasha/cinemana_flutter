@@ -50,46 +50,47 @@ final videoPlayerPlayingStateProvider = StreamProvider<bool>(
   (ref) => ref.watch(videoPlayerProvider).stream.playing,
 );
 
-final mediaVideoOpenerControllerWrapperProvider =
-    FutureProvider<VideoController?>((ref) async {
-  final videoPlayer = ref.watch(videoPlayerProvider);
-  final video = ref.watch(videoProvider);
+// final mediaVideoOpenerControllerWrapperProvider =
+//     FutureProvider<VideoController>((ref) async {
+//   final videoPlayer = ref.watch(videoPlayerProvider);
+//   final video = ref.watch(videoProvider);
 
-  if (video == null) {
-    await videoPlayer.stop();
-    return null;
-  }
+//   if (video == null) {
+//     await videoPlayer.stop();
+//   } else {
+//     await videoPlayer.open(video);
+//   }
 
-  await videoPlayer.open(video);
-  final controller = VideoController(
-    videoPlayer,
-  );
+//   final controller = VideoController(
+//     videoPlayer,
+//   );
 
-  // controller.setSize(
-  //   height: video.resolution.height,
-  //   width: 16 / 9 * video.resolution.height ~/ 1,
-  // );
+//   return controller;
+// });
 
-  return controller;
-});
+// final mediaSubtitleSetterControllerWrapperProvider =
+//     Provider<VideoController>((ref) async {
+//   final controllerValue = ref.watch(mediaVideoOpenerControllerWrapperProvider);
+//   final subtitle = ref.watch(subtitleProvider.notifier).addListener(listener);
 
-final mediaSubtitleSetterControllerWrapperProvider =
-    FutureProvider<VideoController?>((ref) async {
-  final controllerValue = ref.watch(mediaVideoOpenerControllerWrapperProvider);
-  final subtitle = ref.watch(subtitleProvider);
+//   final controller = controllerValue.value;
 
-  final controller = controllerValue.valueOrNull;
+//   final videoPlayer = ref.read(videoPlayerProvider);
+//   if (subtitle != null) {
+//     await videoPlayer.setSubtitleTrack(subtitle);
+//   } else {
+//     await videoPlayer.setSubtitleTrack(media_kit.SubtitleTrack.no());
+//   }
 
-  final videoPlayer = ref.read(videoPlayerProvider);
-  if (subtitle != null) {
-    await videoPlayer.setSubtitleTrack(subtitle);
-  } else {
-    await videoPlayer.setSubtitleTrack(media_kit.SubtitleTrack.no());
-  }
+//   return controller;
+// });
 
-  return controller;
-});
+final videoPlayerControllerProvider = Provider<VideoController>(
+  (ref) {
+    final player = ref.watch(videoPlayerProvider);
 
-final videoPlayerControllerProvider = Provider<VideoController?>(
-  (ref) => ref.watch(mediaSubtitleSetterControllerWrapperProvider).valueOrNull,
+    return VideoController(
+      player,
+    );
+  },
 );
