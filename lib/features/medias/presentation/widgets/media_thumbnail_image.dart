@@ -11,22 +11,19 @@ class MediaThumbnailImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 0.66,
-      child: url != null
-          ? CachedNetworkImage(
-              progressIndicatorBuilder: (context, url, progress) => Center(
-                  child: CircularProgressIndicator(value: progress.progress)),
-              imageUrl: url!,
-              fit: BoxFit.cover,
-              filterQuality: FilterQuality.high,
-            )
-          : ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 10, maxWidth: 10),
-              child: Image.asset(
-                "assets/images/cinemana.png",
-              ),
+    return url != null
+        ? CachedNetworkImage(
+            progressIndicatorBuilder: (context, url, progress) => Center(
+                child: CircularProgressIndicator(value: progress.progress)),
+            imageUrl: url!,
+            fit: BoxFit.cover,
+            filterQuality: FilterQuality.high,
+          )
+        : ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 10, maxWidth: 10),
+            child: Image.asset(
+              "assets/images/cinemana.png",
             ),
-    );
+          );
   }
 }

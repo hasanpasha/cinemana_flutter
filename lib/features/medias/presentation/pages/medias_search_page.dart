@@ -17,7 +17,7 @@ class MediasSearchPage extends ConsumerStatefulWidget {
 }
 
 class _MediasSearchPageState extends ConsumerState<MediasSearchPage> {
-  static const double searchGridChildAspectRatio = 0.66;
+  static const double searchGridChildAspectRatio = 0.56;
   static const int searchGridChildMinSize = 150;
 
   @override
