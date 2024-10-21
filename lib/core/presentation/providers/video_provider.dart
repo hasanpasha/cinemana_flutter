@@ -3,12 +3,11 @@ import 'dart:collection';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../features/medias/domain/entities/entities.dart';
-import '../../../features/medias/domain/usecases/get_videos.dart';
-import '../../../features/medias/presentation/widgets/models/player_video.dart';
-import '../../../injection_container.dart';
 import '../extensions.dart';
+import '../models/player_video.dart';
 import 'media_provider.dart';
 import 'series_provider.dart';
+import 'usecases_providers.dart';
 
 final availableVideoResolutionsProvider = Provider<Iterable<VideoResolution>?>(
   (ref) => ref
@@ -18,7 +17,7 @@ final availableVideoResolutionsProvider = Provider<Iterable<VideoResolution>?>(
 );
 
 final allVideosProvider = FutureProvider<List<PlayerVideo>?>((ref) async {
-  final GetVideos getVideos = sl();
+  final getVideos = ref.watch(getVideosUsecaseProvider);
 
   Media? currentMedia;
 

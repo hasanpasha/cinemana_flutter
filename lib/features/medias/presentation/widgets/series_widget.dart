@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/presentation/providers/providers.dart';
 
-class SeasonsView extends ConsumerWidget {
-  const SeasonsView({super.key});
+class SeriesWidget extends ConsumerWidget {
+  const SeriesWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

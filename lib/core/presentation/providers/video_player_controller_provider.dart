@@ -6,7 +6,33 @@ import 'subtitle_provider.dart';
 import 'video_provider.dart';
 
 class VideoPlayerNotifier extends StateNotifier<media_kit.Player> {
-  VideoPlayerNotifier(super.state);
+  VideoPlayerNotifier() : super(createPlayer());
+
+  void updateWith({
+    String? libassAndroidFont,
+    String? libassAndroidFontName,
+  }) {
+    state = createPlayer(
+      libassAndroidFont: libassAndroidFont,
+      libassAndroidFontName: libassAndroidFontName,
+    );
+  }
+
+  static media_kit.Player createPlayer({
+    String? libassAndroidFont,
+    String? libassAndroidFontName,
+  }) {
+    libassAndroidFont ??= 'assets/fonts/AdobeArabic-Regular.ttf';
+    libassAndroidFontName ??= 'Adobe Arabic';
+
+    return media_kit.Player(
+      configuration: media_kit.PlayerConfiguration(
+        libass: true,
+        libassAndroidFont: libassAndroidFont,
+        libassAndroidFontName: libassAndroidFontName,
+      ),
+    );
+  }
 
   @override
   void dispose() {
@@ -17,15 +43,7 @@ class VideoPlayerNotifier extends StateNotifier<media_kit.Player> {
 
 final videoPlayerProvider =
     StateNotifierProvider<VideoPlayerNotifier, media_kit.Player>(
-  (ref) => VideoPlayerNotifier(
-    media_kit.Player(
-      configuration: const media_kit.PlayerConfiguration(
-        libass: true,
-        libassAndroidFont: 'assets/fonts/AdobeArabic-Regular.ttf',
-        libassAndroidFontName: 'Adobe Arabic',
-      ),
-    ),
-  ),
+  (ref) => VideoPlayerNotifier(),
 );
 
 final videoPlayerPlayingStateProvider = StreamProvider<bool>(
@@ -43,7 +61,16 @@ final mediaVideoOpenerControllerWrapperProvider =
   }
 
   await videoPlayer.open(video);
-  return VideoController(videoPlayer);
+  final controller = VideoController(
+    videoPlayer,
+  );
+
+  // controller.setSize(
+  //   height: video.resolution.height,
+  //   width: 16 / 9 * video.resolution.height ~/ 1,
+  // );
+
+  return controller;
 });
 
 final mediaSubtitleSetterControllerWrapperProvider =

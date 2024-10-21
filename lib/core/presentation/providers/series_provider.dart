@@ -4,17 +4,16 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../features/medias/domain/entities/entities.dart';
-import '../../../features/medias/domain/usecases/get_seasons.dart';
-import '../../../injection_container.dart';
 import '../extensions.dart';
 import 'media_provider.dart';
+import 'usecases_providers.dart';
 
 typedef SeasonEpisodePair = (Season, Episode);
 typedef EpisodeEntries = DoubleLinkedQueue<SeasonEpisodePair>;
 typedef EpisodeEntry = DoubleLinkedQueueEntry<SeasonEpisodePair>;
 
 final allSeasonsProvider = FutureProvider<List<Season>?>((ref) async {
-  final GetSeasons getSeasons = sl();
+  final getSeasons = ref.watch(getSeasonsUsecaseProvider);
 
   final media = ref.watch(mediaProvider);
 

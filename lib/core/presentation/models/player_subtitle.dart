@@ -2,7 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:sealed_languages/sealed_languages.dart';
 
-import '../../../domain/entities/subtitle.dart';
+import '../../../features/medias/domain/entities/subtitle.dart';
 
 class PlayerSubtitle extends SubtitleTrack {
   PlayerSubtitle({

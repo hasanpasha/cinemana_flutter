@@ -6,7 +6,7 @@ import 'package:media_kit_video/media_kit_video.dart';
 import '../../../../core/presentation/providers/providers.dart';
 import '../../domain/entities/video_resolution.dart';
 import 'custom_popup_menu_item.dart';
-import 'models/player_subtitle.dart';
+import '../../../../core/presentation/models/player_subtitle.dart';
 
 Widget customAdaptiveVideoControls(VideoState state) {
   switch (Theme.of(state.context).platform) {
@@ -231,43 +231,50 @@ void showSubtitleModalBottomSheet(BuildContext context) {
       return Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) {
           final availableSubtitles = ref.watch(availableSubtitlesProvider);
+          final currentSubtitle = ref.watch(subtitleProvider);
 
           if (availableSubtitles == null) return const SizedBox.shrink();
 
-          return ListView.builder(
+          return ListView(
             clipBehavior: Clip.hardEdge,
-            itemCount: availableSubtitles.length + 1,
-            itemBuilder: (context, index) {
-              if (index == availableSubtitles.length) {
-                return ListTile(
-                  title: const Text("Select Local subtitle"),
-                  onTap: () async {
-                    final newSubtitle = await _pickLocalSubtitle();
-                    if (newSubtitle != null) {
-                      ref
-                          .read(availableSubtitlesProvider.notifier)
-                          .add(newSubtitle);
-                      ref.read(subtitleProvider.notifier).state = newSubtitle;
-                    }
-                    if (context.mounted) {
+            children: [
+              ...availableSubtitles.map(
+                (subtitle) {
+                  final isSelected = currentSubtitle == subtitle;
+
+                  return ListTile(
+                    selected: isSelected,
+                    title: Text(subtitle.toString()),
+                    onTap: () {
+                      ref.read(subtitleProvider.notifier).state = subtitle;
                       Navigator.pop(context);
-                    }
-                  },
-                );
-              }
-
-              final currentSubtitle = availableSubtitles.elementAt(index);
-              final isSelected = ref.read(subtitleProvider) == currentSubtitle;
-
-              return ListTile(
-                selected: isSelected,
-                title: Text(currentSubtitle.toString()),
+                    },
+                  );
+                },
+              ),
+              ListTile(
+                title: const Text("Select Local subtitle"),
+                onTap: () async {
+                  final newSubtitle = await _pickLocalSubtitle();
+                  if (newSubtitle != null) {
+                    ref
+                        .read(availableSubtitlesProvider.notifier)
+                        .add(newSubtitle);
+                    ref.read(subtitleProvider.notifier).state = newSubtitle;
+                  }
+                  if (context.mounted) {
+                    Navigator.pop(context);
+                  }
+                },
+              ),
+              ListTile(
+                title: const Text("Hide subtitle"),
                 onTap: () {
-                  ref.read(subtitleProvider.notifier).state = currentSubtitle;
+                  ref.read(subtitleProvider.notifier).state = null;
                   Navigator.pop(context);
                 },
-              );
-            },
+              ),
+            ],
           );
         },
       );
@@ -310,6 +317,37 @@ void showResolutionModalBottomSheet(BuildContext context) {
   );
 }
 
+void showBoxFitModalBottomSheet(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    builder: (context) {
+      return Consumer(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) {
+          final currentBoxFit = ref.watch(videoBoxFitStateProvider);
+          const allBoxFitOptions = BoxFit.values;
+
+          return ListView.builder(
+            itemCount: allBoxFitOptions.length,
+            itemBuilder: (BuildContext context, int index) {
+              final value = allBoxFitOptions.elementAt(index);
+              final isSelected = value == currentBoxFit;
+
+              return ListTile(
+                selected: isSelected,
+                title: Text(value.name),
+                onTap: () {
+                  ref.watch(videoBoxFitStateProvider.notifier).state = value;
+                  Navigator.pop(context);
+                },
+              );
+            },
+          );
+        },
+      );
+    },
+  );
+}
+
 void showSettingsModalBottomSheet(BuildContext context) {
   showModalBottomSheet(
     context: context,
@@ -329,6 +367,13 @@ void showSettingsModalBottomSheet(BuildContext context) {
             onTap: () {
               Navigator.pop(context);
               showSubtitleModalBottomSheet(context);
+            },
+          ),
+          ListTile(
+            title: const Text("Fit"),
+            onTap: () {
+              Navigator.pop(context);
+              showBoxFitModalBottomSheet(context);
             },
           ),
         ],

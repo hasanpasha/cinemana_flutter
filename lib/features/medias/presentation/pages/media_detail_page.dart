@@ -11,7 +11,7 @@ import '../../../../core/presentation/providers/providers.dart';
 import '../../domain/entities/media.dart';
 import '../../domain/entities/media_kind.dart';
 import '../widgets/custom_adaptive_video_controls.dart';
-import '../widgets/seasons_view.dart';
+import '../widgets/series_widget.dart';
 
 class MediaDetailPage extends ConsumerStatefulWidget {
   const MediaDetailPage({
@@ -91,7 +91,7 @@ class MediaView extends ConsumerWidget {
         ),
         if (showSeasons)
           const SliverFillRemaining(
-            child: SeasonsView(),
+            child: SeriesWidget(),
           ),
       ],
     );
@@ -120,7 +120,7 @@ class MediaView extends ConsumerWidget {
                 ),
                 SizedBox(width: 25),
                 Flexible(
-                  child: SeasonsView(),
+                  child: SeriesWidget(),
                 ),
               ],
             )
@@ -187,8 +187,11 @@ class MediaVideoPlayer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final videoController = ref.watch(videoPlayerControllerProvider);
+    final videoBoxFit = ref.watch(videoBoxFitStateProvider);
+
     if (videoController == null) return const SizedBox.shrink();
     return Video(
+      fit: videoBoxFit,
       controller: videoController,
       controls: showControls ? customAdaptiveVideoControls : NoVideoControls,
     );

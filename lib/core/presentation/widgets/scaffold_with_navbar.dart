@@ -45,9 +45,6 @@ class _ScaffoldWithNavbarState extends State<ScaffoldWithNavbar> {
               child: NavigationRail(
                 selectedIndex: _currentIndex,
                 labelType: NavigationRailLabelType.selected,
-                selectedLabelTextStyle: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                ),
                 onDestinationSelected: onDestinationSelected,
                 destinations: destinations
                     .map((e) => e.getNavigationRailDestination())

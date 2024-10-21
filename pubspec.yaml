@@ -46,6 +46,15 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+flutter_icon:
+  android: true
+  ios: true
+  linux: true
+  window: true
+  macos: true
+  image_path: "assets/icon/icon.png"
+
+
 flutter:
   uses-material-design: true
 
@@ -65,5 +74,6 @@ flutter:
         - asset: assets/fonts/AdobeArabic-Regular.ttf
         - asset: assets/fonts/AdobeArabic-Bold.ttf
           weight: 800
-  # assets:
-  #   - assets/images/cinemana.png
+  assets:
+    - assets/images/cinemana.png
+    - assets/icon/icon.png

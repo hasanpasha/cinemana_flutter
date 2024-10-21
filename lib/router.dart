@@ -5,7 +5,7 @@ import 'features/medias/domain/entities/media.dart';
 import 'features/medias/presentation/pages/media_detail_page.dart';
 import 'features/medias/presentation/pages/medias_page.dart';
 import 'features/medias/presentation/pages/medias_search_page.dart';
-import 'features/medias/presentation/widgets/scaffold_with_navbar.dart';
+import 'core/presentation/widgets/scaffold_with_navbar.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();

@@ -4,12 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sealed_languages/sealed_languages.dart';
 
 import '../../../features/medias/domain/entities/entities.dart';
-import '../../../features/medias/domain/usecases/get_subtitles.dart';
-import '../../../features/medias/presentation/widgets/models/player_subtitle.dart';
-import '../../../injection_container.dart';
 import '../extensions.dart';
+import '../models/player_subtitle.dart';
 import 'media_provider.dart';
 import 'series_provider.dart';
+import 'usecases_providers.dart';
 
 class AvailableSubtitles extends StateNotifier<List<PlayerSubtitle>?> {
   AvailableSubtitles(super.state);
@@ -30,7 +29,7 @@ final availableSubtitlesProvider =
 );
 
 final allSubtitlesProvider = FutureProvider<List<PlayerSubtitle>?>((ref) async {
-  final GetSubtitles getSubtitles = sl();
+  final getSubtitles = ref.watch(getSubtitlesUsecaseProvider);
 
   Media? currentMedia;
 
