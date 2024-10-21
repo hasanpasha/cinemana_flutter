@@ -40,16 +40,13 @@ class _ScaffoldWithNavbarState extends State<ScaffoldWithNavbar> {
       body: Row(
         children: [
           if (context.isDesktop || context.isTablet)
-            SizedBox(
-              width: 75,
-              child: NavigationRail(
-                selectedIndex: _currentIndex,
-                labelType: NavigationRailLabelType.selected,
-                onDestinationSelected: onDestinationSelected,
-                destinations: destinations
-                    .map((e) => e.getNavigationRailDestination())
-                    .toList(),
-              ),
+            NavigationRail(
+              selectedIndex: _currentIndex,
+              labelType: NavigationRailLabelType.selected,
+              onDestinationSelected: onDestinationSelected,
+              destinations: destinations
+                  .map((e) => e.getNavigationRailDestination())
+                  .toList(),
             ),
           Expanded(child: SafeArea(child: widget.child)),
         ],
