@@ -18,6 +18,11 @@ abstract class MediasRemoteDataSource {
     int? page,
   });
 
+  /// Calls the https://cinemana.shabakaty.com/api/android/latest{Kind}/level/1/itemsPerPage/20/page/{}/
+  ///
+  /// Throws a [ServerException] on failure
+  Future<MediasModel> getLatest({MediaKindModel? kind, int? page});
+
   /// Calls the https://cinemana.shabakaty.com/api/android/transcoddedFiles/id/{}
   ///
   /// Throws a [ServerException] on failure
@@ -68,6 +73,27 @@ class MediasRemoteDataSourceImpl implements MediasRemoteDataSource {
     } on DioException {
       throw ServerException();
     }
+  }
+
+  @override
+  Future<MediasModel> getLatest({MediaKindModel? kind, int? page}) async {
+    kind ??= MediaKindModel.movies;
+    page ??= 1;
+
+    final latestKind = kind == MediaKindModel.movies ? "Movies" : "Series";
+
+    try {
+      print("getting latest medias data");
+      final result = await dio
+          .get('/latest$latestKind/level/1/itemsPerPage/20/page/$page/');
+      if (result.statusCode != 200) throw ServerException();
+      print(result.data);
+      return MediasModel.fromJson(result.data);
+    } on DioException {
+      throw ServerException();
+    }
+
+    // https://cinemana.shabakaty.com/api/android
   }
 
   @override

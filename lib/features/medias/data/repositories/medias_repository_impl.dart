@@ -57,6 +57,18 @@ class MediasRepositoryImpl implements MediasRepository {
   }
 
   @override
+  Future<Either<Failure, Medias>> getLatest(
+      {MediaKind? kind, int? page}) async {
+    final kindModel = kind != null ? MediaKindModel.fromEntity(kind) : null;
+    try {
+      final result = await remote.getLatest(kind: kindModel, page: page);
+      return Right(result);
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
   Future<Either<Failure, List<Video>>> getVideos({required Media media}) async {
     try {
       final result = await remote.getVideos(media.id);

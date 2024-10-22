@@ -25,7 +25,8 @@ class SearchMediasNotifier extends PagedNotifier<int, Media> {
           load: (page, limit) async {
             if (query == null) return null;
 
-            final result = await searchMediasUsecase(search_medias.Params(
+            final result =
+                await searchMediasUsecase(search_medias.SearchMediasParams(
               query: query,
               kind: kind,
               page: page,

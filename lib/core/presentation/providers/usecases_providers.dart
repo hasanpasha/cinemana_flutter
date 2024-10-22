@@ -1,3 +1,4 @@
+import 'package:cinemana/features/medias/domain/usecases/get_latest.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -18,6 +19,12 @@ final searchMediasUsecaseProvider = Provider<SearchMedias>((ref) {
   final repository = ref.watch(mediasRepositoryProvider);
 
   return SearchMedias(repository);
+});
+
+final getLatestUsecaseProvider = Provider<GetLatest>((ref) {
+  final repository = ref.watch(mediasRepositoryProvider);
+
+  return GetLatest(repository);
 });
 
 final getVideosUsecaseProvider = Provider<GetVideos>((ref) {

@@ -1,4 +1,5 @@
 import 'package:cinemana/core/presentation/providers/search_provider.dart';
+import 'package:cinemana/features/medias/presentation/widgets/media_kind_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -25,8 +26,12 @@ class _MediasSearchPageState extends ConsumerState<MediasSearchPage> {
     return Scaffold(
       appBar: AppBar(
         title: const SearchQueryField(),
-        actions: const [
-          SearchKindSelector(),
+        actions: [
+          MediaKindSelector(
+            onSelected: (kind) {
+              ref.read(searchKindStateProvider.notifier).state = kind;
+            },
+          ),
         ],
       ),
       body: Column(
@@ -114,40 +119,6 @@ class _SearchQueryFieldState extends ConsumerState<SearchQueryField> {
       onSubmitted: (value) {
         ref.read(searchQueryStateProvider.notifier).state = value;
       },
-    );
-  }
-}
-
-class SearchKindSelector extends ConsumerWidget {
-  const SearchKindSelector({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    const kinds = MediaKind.values;
-    final mediaKind = ref.watch(searchKindStateProvider);
-    final selectedColor = Theme.of(context).colorScheme.primary;
-
-    return Row(
-      children: kinds.map((kind) {
-        final isSelected = mediaKind == kind;
-
-        return Container(
-          decoration: BoxDecoration(
-            border: isSelected
-                ? Border(bottom: BorderSide(color: selectedColor))
-                : null,
-          ),
-          child: IconButton(
-            tooltip: kind.name,
-            icon: Icon(kind == MediaKind.movies ? Icons.movie : Icons.tv),
-            color: isSelected ? selectedColor : null,
-            onPressed: () =>
-                ref.read(searchKindStateProvider.notifier).state = kind,
-          ),
-        );
-      }).toList(),
     );
   }
 }

@@ -43,7 +43,7 @@ void main() {
         .thenAnswer((_) async => const Right(tMedias));
 
     // act
-    final result = await usecase(Params(query: tQuery));
+    final result = await usecase(SearchMediasParams(query: tQuery));
 
     // assert
     expect(result, const Right(tMedias));

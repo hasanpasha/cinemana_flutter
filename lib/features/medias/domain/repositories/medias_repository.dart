@@ -10,6 +10,8 @@ abstract class MediasRepository {
     int? page,
   });
 
+  Future<Either<Failure, Medias>> getLatest({MediaKind? kind, int? page});
+
   Future<Either<Failure, List<Video>>> getVideos({required Media media});
 
   Future<Either<Failure, List<Subtitle>>> getSubtitles({required Media media});
