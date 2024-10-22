@@ -98,7 +98,7 @@ class LatestMedias extends ConsumerWidget {
                     showTitleText: true,
                     onPress: (media) {
                       ref.read(mediaProvider.notifier).state = media;
-                      context.goNamed('mediaDetail', extra: media);
+                      context.goNamed('mainMediaDetail');
                     },
                   ),
                 ),

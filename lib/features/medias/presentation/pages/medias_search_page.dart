@@ -47,7 +47,7 @@ class _MediasSearchPageState extends ConsumerState<MediasSearchPage> {
                     showTitleText: true,
                     onPress: (media) {
                       ref.read(mediaProvider.notifier).state = media;
-                      context.goNamed('mediaDetail', extra: media);
+                      context.goNamed('searchedMediaDetail');
                     },
                   ),
                 ),

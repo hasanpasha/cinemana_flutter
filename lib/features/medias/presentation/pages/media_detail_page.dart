@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:keep_screen_on/keep_screen_on.dart';
 import 'package:logging/logging.dart';
 import 'package:media_kit/media_kit.dart' as media_kit;
@@ -10,18 +11,12 @@ import 'package:media_kit_video/media_kit_video.dart';
 
 import '../../../../core/presentation/extensions.dart';
 import '../../../../core/presentation/providers/providers.dart';
-import '../../domain/entities/media.dart';
 import '../../domain/entities/media_kind.dart';
 import '../widgets/custom_adaptive_video_controls.dart';
 import '../widgets/series_widget.dart';
 
 class MediaDetailPage extends ConsumerStatefulWidget {
-  const MediaDetailPage({
-    super.key,
-    required this.media,
-  });
-
-  final Media media;
+  const MediaDetailPage({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -31,7 +26,7 @@ class MediaDetailPage extends ConsumerStatefulWidget {
 class _MediaDetailPageState extends ConsumerState<MediaDetailPage> {
   @override
   void initState() {
-    ref.read(mediaProvider.notifier).state = widget.media;
+    super.initState();
 
     if (Platform.isAndroid || Platform.isIOS) {
       KeepScreenOn.turnOn();
@@ -40,8 +35,6 @@ class _MediaDetailPageState extends ConsumerState<MediaDetailPage> {
         SystemUiMode.immersive,
       );
     }
-
-    super.initState();
   }
 
   @override
@@ -59,26 +52,8 @@ class _MediaDetailPageState extends ConsumerState<MediaDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    final media = widget.media;
-
-    return Hero(
-      tag: media.id,
-      child: MediaView(media: media),
-    );
-  }
-}
-
-class MediaView extends ConsumerWidget {
-  const MediaView({
-    super.key,
-    required this.media,
-  });
-
-  final Media media;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final showSeasons = media.kind == MediaKind.series;
+    final media = ref.watch(mediaProvider);
+    final showSeasons = media?.kind == MediaKind.series;
 
     final phoneView = CustomScrollView(
       slivers: [
@@ -130,7 +105,15 @@ class MediaView extends ConsumerWidget {
     );
 
     return Scaffold(
-      body: context.isPhone ? phoneView : desktopView,
+      appBar: AppBar(
+        leading: BackButton(
+          onPressed: () => context.pop(),
+        ),
+      ),
+      body: Hero(
+        tag: media?.id ?? 'NO_MEDIA',
+        child: context.isPhone ? phoneView : desktopView,
+      ),
     );
   }
 }
