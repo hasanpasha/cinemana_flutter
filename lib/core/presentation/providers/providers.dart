@@ -7,6 +7,8 @@ export 'series_provider.dart';
 export 'subtitle_provider.dart';
 export 'video_player_controller_provider.dart';
 export 'video_provider.dart';
+export 'search_provider.dart';
+export 'latest_provider.dart';
 
 final videoBoxFitStateProvider = StateProvider<BoxFit>(
   (ref) => BoxFit.contain,

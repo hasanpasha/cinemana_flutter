@@ -1,17 +1,16 @@
-import 'package:cinemana/core/presentation/providers/latest_provider.dart';
-import 'package:cinemana/features/medias/domain/entities/entities.dart';
-import 'package:cinemana/features/medias/presentation/widgets/media_kind_selector.dart';
-import 'package:cinemana/features/medias/presentation/widgets/media_poster.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:riverpod_infinite_scroll/riverpod_infinite_scroll.dart';
 
-import '../../../../core/presentation/providers/providers.dart';
 import '../../../../core/presentation/extensions.dart';
+import '../../../../core/presentation/providers/providers.dart';
+import '../../domain/entities/entities.dart';
 import '../../domain/entities/media.dart';
 import '../widgets/custom_adaptive_video_controls.dart';
+import '../widgets/media_kind_selector.dart';
+import '../widgets/media_poster.dart';
 import 'media_detail_page.dart';
 
 class MediasPage extends ConsumerWidget {
@@ -54,6 +53,8 @@ class MediasPage extends ConsumerWidget {
 }
 
 class LatestMedias extends ConsumerWidget {
+  const LatestMedias({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(

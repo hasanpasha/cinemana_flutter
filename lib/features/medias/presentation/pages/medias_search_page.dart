@@ -1,5 +1,3 @@
-import 'package:cinemana/core/presentation/providers/search_provider.dart';
-import 'package:cinemana/features/medias/presentation/widgets/media_kind_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,6 +6,7 @@ import 'package:riverpod_infinite_scroll/riverpod_infinite_scroll.dart';
 
 import '../../../../core/presentation/providers/providers.dart';
 import '../../domain/entities/entities.dart';
+import '../widgets/media_kind_selector.dart';
 import '../widgets/media_poster.dart';
 
 class MediasSearchPage extends ConsumerStatefulWidget {

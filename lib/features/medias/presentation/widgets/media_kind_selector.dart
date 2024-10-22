@@ -1,8 +1,6 @@
-import 'package:cinemana/core/presentation/providers/search_provider.dart';
-import 'package:cinemana/features/medias/domain/entities/media_kind.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../domain/entities/media_kind.dart';
 
 class MediaKindSelector extends StatefulWidget {
   const MediaKindSelector({
