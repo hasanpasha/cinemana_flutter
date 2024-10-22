@@ -86,13 +86,13 @@ class _FloatingMediaVideo extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Spacer(),
-                PhonePreviousButton(
+                PreviousButton(
                   iconColor: Colors.white,
                 ),
                 PlayingToggleButton(
                   iconColor: Colors.white,
                 ),
-                PhoneNextButton(
+                NextButton(
                   iconColor: Colors.white,
                 ),
                 Spacer(),

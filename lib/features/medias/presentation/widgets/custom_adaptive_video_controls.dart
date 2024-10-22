@@ -41,11 +41,11 @@ class CustomMaterialVideoControls extends StatelessWidget {
       seekBarThumbSize: 18,
       primaryButtonBar: const [
         Spacer(flex: 2),
-        PhonePreviousButton(),
+        PreviousButton(),
         Spacer(),
         MaterialPlayOrPauseButton(iconSize: 48.0),
         Spacer(),
-        PhoneNextButton(),
+        NextButton(),
         Spacer(flex: 2),
       ],
       topButtonBar: [
@@ -80,6 +80,163 @@ class CustomMaterialVideoControls extends StatelessWidget {
       child: MaterialVideoControls(state),
     );
   }
+
+  void showSubtitleModalBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            final availableSubtitles = ref.watch(availableSubtitlesProvider);
+            final currentSubtitle = ref.watch(subtitleProvider);
+
+            if (availableSubtitles == null) return const SizedBox.shrink();
+
+            return ListView(
+              clipBehavior: Clip.hardEdge,
+              children: [
+                ...availableSubtitles.map(
+                  (subtitle) {
+                    final isSelected = currentSubtitle == subtitle;
+
+                    return ListTile(
+                      selected: isSelected,
+                      title: Text(subtitle.toString()),
+                      onTap: () {
+                        ref.read(subtitleProvider.notifier).state = subtitle;
+                        Navigator.pop(context);
+                      },
+                    );
+                  },
+                ),
+                ListTile(
+                  title: const Text("Select Local subtitle"),
+                  onTap: () async {
+                    final newSubtitle = await _pickLocalSubtitle();
+                    if (newSubtitle != null) {
+                      ref
+                          .read(availableSubtitlesProvider.notifier)
+                          .add(newSubtitle);
+                      ref.read(subtitleProvider.notifier).state = newSubtitle;
+                    }
+                    if (context.mounted) {
+                      Navigator.pop(context);
+                    }
+                  },
+                ),
+                ListTile(
+                  title: const Text("Hide subtitle"),
+                  onTap: () {
+                    ref.read(subtitleProvider.notifier).state = null;
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void showResolutionModalBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            final videos = ref.watch(availableVideosProvider);
+
+            if (videos == null) return const SizedBox.shrink();
+
+            return ListView.builder(
+              clipBehavior: Clip.hardEdge,
+              itemCount: videos.length,
+              itemBuilder: (context, index) {
+                final currentVideo = videos.elementAt(index);
+                final isSelected = ref.read(videoResolutionProvider) ==
+                    currentVideo.resolution;
+
+                return ListTile(
+                  selected: isSelected,
+                  title: Text(currentVideo.toString()),
+                  onTap: () {
+                    ref.read(videoProvider.notifier).state = currentVideo;
+                    Navigator.pop(context);
+                  },
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void showBoxFitModalBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            final currentBoxFit = ref.watch(videoBoxFitStateProvider);
+            const allBoxFitOptions = BoxFit.values;
+
+            return ListView.builder(
+              itemCount: allBoxFitOptions.length,
+              itemBuilder: (BuildContext context, int index) {
+                final value = allBoxFitOptions.elementAt(index);
+                final isSelected = value == currentBoxFit;
+
+                return ListTile(
+                  selected: isSelected,
+                  title: Text(value.name),
+                  onTap: () {
+                    ref.watch(videoBoxFitStateProvider.notifier).state = value;
+                    Navigator.pop(context);
+                  },
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void showSettingsModalBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return ListView(
+          clipBehavior: Clip.hardEdge,
+          children: [
+            ListTile(
+              title: const Text("Resolution"),
+              onTap: () {
+                Navigator.pop(context);
+                showResolutionModalBottomSheet(context);
+              },
+            ),
+            ListTile(
+              title: const Text("Subtitle"),
+              onTap: () {
+                Navigator.pop(context);
+                showSubtitleModalBottomSheet(context);
+              },
+            ),
+            ListTile(
+              title: const Text("Fit"),
+              onTap: () {
+                Navigator.pop(context);
+                showBoxFitModalBottomSheet(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class CustomMaterialDesktopVideoControls extends StatelessWidget {
@@ -90,11 +247,8 @@ class CustomMaterialDesktopVideoControls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = MaterialDesktopVideoControlsThemeData(
-      // seekBarThumbColor: Colors.blue,
-      // seekBarPositionColor: Colors.blue,
       toggleFullscreenOnDoublePress: true,
       hideMouseOnControlsRemoval: true,
-
       topButtonBar: [
         // const GoPopButton(),
         // Text(
@@ -105,8 +259,8 @@ class CustomMaterialDesktopVideoControls extends StatelessWidget {
       ],
       bottomButtonBar: [
         const MaterialDesktopPlayOrPauseButton(),
-        const DesktopPreviousButton(),
-        const DesktopNextButton(),
+        const PreviousButton(),
+        const NextButton(),
         const MaterialDesktopVolumeButton(),
         const MaterialDesktopPositionIndicator(),
         const Spacer(),
@@ -132,327 +286,140 @@ class CustomMaterialDesktopVideoControls extends StatelessWidget {
       child: MaterialDesktopVideoControls(state),
     );
   }
-}
 
-class DesktopPreviousButton extends PreviousButton {
-  const DesktopPreviousButton({super.key, super.iconColor})
-      : super(isPhone: false);
-}
+  Widget buildSubtitlesPopupMenu() {
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) {
+        final subtitles = ref.watch(availableSubtitlesProvider);
 
-class DesktopNextButton extends NextButton {
-  const DesktopNextButton({super.key, super.iconColor}) : super(isPhone: false);
-}
+        if (subtitles == null) return const SizedBox.shrink();
 
-class PhonePreviousButton extends PreviousButton {
-  const PhonePreviousButton({super.key, super.iconColor})
-      : super(isPhone: true);
-}
+        return PopupMenuButton<PlayerSubtitle>(
+          itemBuilder: (context) => [
+            ...subtitles.map((subtitle) {
+              final isSelected = ref.read(subtitleProvider) == subtitle;
+              return CustomPopupMenuItem<PlayerSubtitle>(
+                isSelected: isSelected,
+                selectedBackgroundColor: Colors.green.shade400,
+                onTap: () {
+                  ref.read(subtitleProvider.notifier).state = subtitle;
+                  Navigator.pop(context);
+                },
+                child: Text(subtitle.name),
+              );
+            }),
+            PopupMenuItem(
+              child: const Text("Select Local subtitle"),
+              onTap: () async {
+                final newSubtitle = await _pickLocalSubtitle();
+                if (newSubtitle != null) {
+                  ref
+                      .read(availableSubtitlesProvider.notifier)
+                      .add(newSubtitle);
+                  ref.read(subtitleProvider.notifier).state = newSubtitle;
+                }
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
+              },
+            ),
+            PopupMenuItem(
+              child: const Text("No subtitle"),
+              onTap: () {
+                ref.read(subtitleProvider.notifier).state = null;
+                Navigator.pop(context);
+              },
+            ),
+          ],
+          child: ListTile(
+            title: const Text("Subtitles"),
+            subtitle: Text(ref.watch(subtitleProvider)?.name ?? ''),
+          ),
+        );
+      },
+    );
+  }
 
-class PhoneNextButton extends NextButton {
-  const PhoneNextButton({super.key, super.iconColor}) : super(isPhone: true);
+  Widget buildVideoResolutionsPopupMenu() {
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) {
+        final resolutions = ref.watch(availableVideoResolutionsProvider);
+
+        if (resolutions == null) return const SizedBox.shrink();
+
+        return PopupMenuButton<VideoResolution>(
+          itemBuilder: (context) => resolutions.map((resolution) {
+            final isSelected = ref.read(videoResolutionProvider) == resolution;
+            return CustomPopupMenuItem<VideoResolution>(
+              isSelected: isSelected,
+              selectedBackgroundColor: Colors.green.shade400,
+              onTap: () {
+                ref.read(videoResolutionProvider.notifier).state = resolution;
+                Navigator.pop(context);
+              },
+              child: Text(resolution.name),
+            );
+          }).toList(),
+          child: ListTile(
+            title: const Text("Resolutions"),
+            subtitle: Text(ref.watch(videoResolutionProvider).name),
+          ),
+        );
+      },
+    );
+  }
 }
 
 class PreviousButton extends ConsumerWidget {
   const PreviousButton({
     super.key,
-    required this.isPhone,
     this.iconColor,
   });
 
-  final bool isPhone;
   final Color? iconColor;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final episodeState = ref.watch(seriesControllerProvider);
-    if (episodeState?.hasPrevious ?? false) {
-      const icon = Icon(Icons.skip_previous);
-      onPressed() => episodeState?.switchToPreviousEpisode();
+    const icon = Icon(Icons.skip_previous);
+    onPressed() => episodeState?.switchToPreviousEpisode();
 
-      if (isPhone) {
-        return MaterialCustomButton(
-          onPressed: onPressed,
-          icon: icon,
-          iconColor: iconColor,
-        );
-      } else {
-        return MaterialDesktopCustomButton(
-          onPressed: onPressed,
-          icon: icon,
-          iconColor: iconColor,
-        );
-      }
-    } else {
+    if (!(episodeState?.hasPrevious ?? false)) {
       return const SizedBox.shrink();
     }
+
+    return MaterialCustomButton(
+      onPressed: onPressed,
+      icon: icon,
+      iconColor: iconColor,
+    );
   }
 }
 
 class NextButton extends ConsumerWidget {
   const NextButton({
     super.key,
-    required this.isPhone,
     this.iconColor,
   });
 
-  final bool isPhone;
   final Color? iconColor;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final episodeState = ref.watch(seriesControllerProvider);
-    if (episodeState?.hasNext ?? false) {
-      const icon = Icon(Icons.skip_next);
-      onPressed() => episodeState?.switchToNextEpisode();
+    const icon = Icon(Icons.skip_next);
+    onPressed() => episodeState?.switchToNextEpisode();
 
-      if (isPhone) {
-        return MaterialCustomButton(
-          onPressed: onPressed,
-          icon: icon,
-          iconColor: iconColor,
-        );
-      } else {
-        return MaterialDesktopCustomButton(
-          onPressed: onPressed,
-          icon: icon,
-          iconColor: iconColor,
-        );
-      }
-    } else {
+    if (!(episodeState?.hasNext ?? false)) {
       return const SizedBox.shrink();
     }
+
+    return MaterialCustomButton(
+      onPressed: onPressed,
+      icon: icon,
+      iconColor: iconColor,
+    );
   }
-}
-
-void showSubtitleModalBottomSheet(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    builder: (context) {
-      return Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) {
-          final availableSubtitles = ref.watch(availableSubtitlesProvider);
-          final currentSubtitle = ref.watch(subtitleProvider);
-
-          if (availableSubtitles == null) return const SizedBox.shrink();
-
-          return ListView(
-            clipBehavior: Clip.hardEdge,
-            children: [
-              ...availableSubtitles.map(
-                (subtitle) {
-                  final isSelected = currentSubtitle == subtitle;
-
-                  return ListTile(
-                    selected: isSelected,
-                    title: Text(subtitle.toString()),
-                    onTap: () {
-                      ref.read(subtitleProvider.notifier).state = subtitle;
-                      Navigator.pop(context);
-                    },
-                  );
-                },
-              ),
-              ListTile(
-                title: const Text("Select Local subtitle"),
-                onTap: () async {
-                  final newSubtitle = await _pickLocalSubtitle();
-                  if (newSubtitle != null) {
-                    ref
-                        .read(availableSubtitlesProvider.notifier)
-                        .add(newSubtitle);
-                    ref.read(subtitleProvider.notifier).state = newSubtitle;
-                  }
-                  if (context.mounted) {
-                    Navigator.pop(context);
-                  }
-                },
-              ),
-              ListTile(
-                title: const Text("Hide subtitle"),
-                onTap: () {
-                  ref.read(subtitleProvider.notifier).state = null;
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        },
-      );
-    },
-  );
-}
-
-void showResolutionModalBottomSheet(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    builder: (context) {
-      return Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) {
-          final resolutions = ref.watch(availableVideoResolutionsProvider);
-
-          if (resolutions == null) return const SizedBox.shrink();
-
-          return ListView.builder(
-            clipBehavior: Clip.hardEdge,
-            itemCount: resolutions.length,
-            itemBuilder: (context, index) {
-              final currentResolution = resolutions.elementAt(index);
-              final isSelected =
-                  ref.read(videoResolutionProvider) == currentResolution;
-
-              return ListTile(
-                selected: isSelected,
-                title: Text(currentResolution.name),
-                onTap: () {
-                  ref.read(videoResolutionProvider.notifier).state =
-                      currentResolution;
-                  Navigator.pop(context);
-                },
-              );
-            },
-          );
-        },
-      );
-    },
-  );
-}
-
-void showBoxFitModalBottomSheet(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    builder: (context) {
-      return Consumer(
-        builder: (BuildContext context, WidgetRef ref, Widget? child) {
-          final currentBoxFit = ref.watch(videoBoxFitStateProvider);
-          const allBoxFitOptions = BoxFit.values;
-
-          return ListView.builder(
-            itemCount: allBoxFitOptions.length,
-            itemBuilder: (BuildContext context, int index) {
-              final value = allBoxFitOptions.elementAt(index);
-              final isSelected = value == currentBoxFit;
-
-              return ListTile(
-                selected: isSelected,
-                title: Text(value.name),
-                onTap: () {
-                  ref.watch(videoBoxFitStateProvider.notifier).state = value;
-                  Navigator.pop(context);
-                },
-              );
-            },
-          );
-        },
-      );
-    },
-  );
-}
-
-void showSettingsModalBottomSheet(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    builder: (context) {
-      return ListView(
-        clipBehavior: Clip.hardEdge,
-        children: [
-          ListTile(
-            title: const Text("Resolution"),
-            onTap: () {
-              Navigator.pop(context);
-              showResolutionModalBottomSheet(context);
-            },
-          ),
-          ListTile(
-            title: const Text("Subtitle"),
-            onTap: () {
-              Navigator.pop(context);
-              showSubtitleModalBottomSheet(context);
-            },
-          ),
-          ListTile(
-            title: const Text("Fit"),
-            onTap: () {
-              Navigator.pop(context);
-              showBoxFitModalBottomSheet(context);
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
-
-Widget buildSubtitlesPopupMenu() {
-  return Consumer(
-    builder: (BuildContext context, WidgetRef ref, Widget? child) {
-      final subtitles = ref.watch(availableSubtitlesProvider);
-
-      if (subtitles == null) return const SizedBox.shrink();
-
-      return PopupMenuButton<PlayerSubtitle>(
-        itemBuilder: (context) => [
-          ...subtitles.map((subtitle) {
-            final isSelected = ref.read(subtitleProvider) == subtitle;
-            return CustomPopupMenuItem<PlayerSubtitle>(
-              isSelected: isSelected,
-              selectedBackgroundColor: Colors.green.shade400,
-              onTap: () {
-                ref.read(subtitleProvider.notifier).state = subtitle;
-                Navigator.pop(context);
-              },
-              child: Text(subtitle.name),
-            );
-          }),
-          PopupMenuItem(
-            child: const Text("Select Local subtitle"),
-            onTap: () async {
-              final newSubtitle = await _pickLocalSubtitle();
-              if (newSubtitle != null) {
-                ref.read(availableSubtitlesProvider.notifier).add(newSubtitle);
-                ref.read(subtitleProvider.notifier).state = newSubtitle;
-              }
-              if (context.mounted) {
-                Navigator.pop(context);
-              }
-            },
-          ),
-        ],
-        child: ListTile(
-          title: const Text("Subtitles"),
-          subtitle: Text(ref.watch(subtitleProvider)?.name ?? ''),
-        ),
-      );
-    },
-  );
-}
-
-Widget buildVideoResolutionsPopupMenu() {
-  return Consumer(
-    builder: (BuildContext context, WidgetRef ref, Widget? child) {
-      final resolutions = ref.watch(availableVideoResolutionsProvider);
-
-      if (resolutions == null) return const SizedBox.shrink();
-
-      return PopupMenuButton<VideoResolution>(
-        itemBuilder: (context) => resolutions.map((resolution) {
-          final isSelected = ref.read(videoResolutionProvider) == resolution;
-          return CustomPopupMenuItem<VideoResolution>(
-            isSelected: isSelected,
-            selectedBackgroundColor: Colors.green.shade400,
-            onTap: () {
-              ref.read(videoResolutionProvider.notifier).state = resolution;
-              Navigator.pop(context);
-            },
-            child: Text(resolution.name),
-          );
-        }).toList(),
-        child: ListTile(
-          title: const Text("Resolutions"),
-          subtitle: Text(ref.watch(videoResolutionProvider).name),
-        ),
-      );
-    },
-  );
 }
 
 Future<PlayerSubtitle?> _pickLocalSubtitle() async {

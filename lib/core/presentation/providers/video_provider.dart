@@ -16,6 +16,10 @@ final availableVideoResolutionsProvider = Provider<Iterable<VideoResolution>?>(
       ?.map((video) => video.resolution),
 );
 
+final availableVideosProvider = Provider<Iterable<PlayerVideo>?>(
+  (ref) => ref.watch(allVideosProvider).valueOrNull,
+);
+
 final allVideosProvider = FutureProvider<List<PlayerVideo>?>((ref) async {
   final getVideos = ref.watch(getVideosUsecaseProvider);
 
@@ -40,7 +44,7 @@ final videoResolutionProvider = StateProvider<VideoResolution>(
   (ref) => VideoResolution.p1080,
 );
 
-final videoProvider = Provider<PlayerVideo?>((ref) {
+final videoProvider = StateProvider<PlayerVideo?>((ref) {
   final videosValue = ref.watch(allVideosProvider);
   final videoResolution = ref.watch(videoResolutionProvider);
 
