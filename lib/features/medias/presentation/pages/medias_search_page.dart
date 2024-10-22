@@ -105,7 +105,7 @@ class _SearchQueryFieldState extends ConsumerState<SearchQueryField> {
         suffix: IconButton(
           onPressed: () {
             controller.clear();
-            ref.read(searchQueryStateProvider.notifier).state = null;
+            ref.read(searchQueryStateProvider.notifier).state = '';
           },
           icon: const Icon(Icons.close),
         ),
