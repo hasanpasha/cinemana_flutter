@@ -83,11 +83,9 @@ class MediasRemoteDataSourceImpl implements MediasRemoteDataSource {
     final latestKind = kind == MediaKindModel.movies ? "Movies" : "Series";
 
     try {
-      print("getting latest medias data");
       final result = await dio
           .get('/latest$latestKind/level/1/itemsPerPage/20/page/$page/');
       if (result.statusCode != 200) throw ServerException();
-      print(result.data);
       return MediasModel.fromJson(result.data);
     } on DioException {
       throw ServerException();

@@ -1,3 +1,4 @@
+import 'package:cinemana/features/medias/presentation/widgets/floating_media_video.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -20,6 +21,8 @@ class _MediasSearchPageState extends ConsumerState<MediasSearchPage> {
   static const double searchGridChildAspectRatio = 0.56;
   static const int searchGridChildMinSize = 150;
 
+  static const String mediaDetailRouteName = 'searchedMediaDetail';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,39 +36,43 @@ class _MediasSearchPageState extends ConsumerState<MediasSearchPage> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: RiverPagedBuilder<int, Media>(
-              firstPageKey: 1,
-              provider: searchMediasNotifierProvider,
-              itemBuilder: (context, media, index) => Hero(
-                tag: media.id,
-                child: Material(
-                  child: MediaPoster(
-                    media: media,
-                    showTitleText: true,
-                    onPress: (media) {
-                      ref.read(mediaProvider.notifier).state = media;
-                      context.goNamed('searchedMediaDetail');
-                    },
+      body: FloatingMediaVideo(
+        onTap: () => context.goNamed(mediaDetailRouteName),
+        child: Column(
+          children: [
+            Expanded(
+              child: RiverPagedBuilder<int, Media>(
+                firstPageKey: 1,
+                provider: searchMediasNotifierProvider,
+                itemBuilder: (context, media, index) => Hero(
+                  tag: media.id,
+                  child: Material(
+                    child: MediaPoster(
+                      media: media,
+                      showTitleText: true,
+                      onPress: (media) {
+                        ref.read(mediaProvider.notifier).state = media;
+                        context.goNamed(mediaDetailRouteName);
+                      },
+                    ),
                   ),
                 ),
+                pagedBuilder: (controller, builder) {
+                  return PagedGridView(
+                    pagingController: controller,
+                    builderDelegate: builder,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount:
+                          MediaQuery.sizeOf(context).width.toInt() ~/
+                              searchGridChildMinSize,
+                      childAspectRatio: searchGridChildAspectRatio,
+                    ),
+                  );
+                },
               ),
-              pagedBuilder: (controller, builder) {
-                return PagedGridView(
-                  pagingController: controller,
-                  builderDelegate: builder,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: MediaQuery.sizeOf(context).width.toInt() ~/
-                        searchGridChildMinSize,
-                    childAspectRatio: searchGridChildAspectRatio,
-                  ),
-                );
-              },
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

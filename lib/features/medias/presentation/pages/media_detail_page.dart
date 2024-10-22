@@ -182,8 +182,10 @@ class _MediaVideoPlayerState extends ConsumerState<MediaVideoPlayer> {
 
     ref.listenManual(
       videoProvider,
-      fireImmediately: true,
+      fireImmediately: false,
       (prev, next) async {
+        if (prev == next) return;
+
         _logger.info("new video: $next");
         final player = ref.read(videoPlayerProvider);
         if (next != null) {
@@ -202,8 +204,10 @@ class _MediaVideoPlayerState extends ConsumerState<MediaVideoPlayer> {
 
     ref.listenManual(
       subtitleProvider,
-      fireImmediately: true,
+      fireImmediately: false,
       (prev, next) async {
+        if (prev == next) return;
+
         _logger.info("new subtitle: $next");
         final player = ref.read(videoPlayerProvider);
         if (next != null) {
