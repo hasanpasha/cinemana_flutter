@@ -30,20 +30,22 @@ final router = GoRouter(
           name: 'home',
           path: '/',
           builder: (context, state) => const MediasPage(),
-        ),
-        GoRoute(
-          name: 'searchMedias',
-          path: '/searchMedias',
-          builder: (context, state) => const MediasSearchPage(),
-        ),
-        GoRoute(
-          name: 'mediaDetail',
-          path: '/mediaDetail',
-          builder: (context, state) {
-            final media = state.extra as Media;
+          routes: [
+            GoRoute(
+              name: 'searchMedias',
+              path: 'searchMedias',
+              builder: (context, state) => const MediasSearchPage(),
+            ),
+            GoRoute(
+              name: 'mediaDetail',
+              path: 'mediaDetail',
+              builder: (context, state) {
+                final media = state.extra as Media;
 
-            return MediaDetailPage(media: media);
-          },
+                return MediaDetailPage(media: media);
+              },
+            ),
+          ],
         ),
       ],
     ),
